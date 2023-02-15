@@ -2,7 +2,7 @@
 Time Series measurement.
 """
 import numpy as np
-from _Mode import Mode
+from .Mode import Mode
 from SignalProcessing.histograms import digitizer_histogram
 from SignalProcessing.histograms import digitizer_histogram2D
 
@@ -129,7 +129,7 @@ class TwoDimHistogram(Mode):
 		assert len(ch) == 2, "Number of channels and outputs do not match."
 		
 		out = {}
-		out["data"] = digitizer_histogram2D(data[0],data[1],self.nbits)[0:1<<self.nbits_out,0:1:<<self.nbits_out]
+		out["data"] = digitizer_histogram2D(data[0],data[1],self.nbits)[0:1<<self.nbits_out,0:1<<self.nbits_out]
 		out["xLabel"] = "Channel %s"%ch[0]
 		out["xUnit"] = "[Bin]"
 		out["yLabel"] = "Channel %s"%ch[1]
@@ -140,5 +140,5 @@ class TwoDimHistogram(Mode):
 		return output
 			
 	def getIndependantAxes(self):
-		x = np.linspace(0,1<<self.nbits_out,1)
+		x = np.linspace(0,1<<self.nbits_out,1<<self.nbits_out)
 		return x, x

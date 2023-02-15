@@ -45,21 +45,21 @@ class Mode:
 	def getIndependantAxes(self):
 		N = self.guzik.config()["n_S_ch"]
 		dt = 1.0/self.guzik.config()["sampling_rate_GSs"]/1e9
-		return np.linspace(0,N*dt,dt)
+		return np.linspace(0,N*dt,N)
 			
-	def updateConfig(self, **newConfig):
+	def updateConfig(self, newConfig):
 		
 		config = self.guzik.config()
 		for key in newConfig.keys():
-			assert key in config.keys(), "Key %s not in config"%keys
+			assert key in config.keys(), "Key %s not in config"%key
 			config[key] = newConfig[key]
-		self.gz.config(**config)
+		self.guzik.config(**config)
 		
 	def printConfig(self):
 		
 		config = self.guzik.config()
 		for key in config.keys():
-			print("%s: %s"%(key,str(),str(config[key])))
+			print("%s: %s"%(key,str(config[key])))
 			
 			
 			

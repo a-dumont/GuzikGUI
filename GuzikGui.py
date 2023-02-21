@@ -8,7 +8,11 @@ import threading
 from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox
 
 import Modes
+del Modes.BlankMode
+
 import Plots
+del Plots.BlankPlot
+
 from GUI import Window
 
 class GuzikOScope(object):
@@ -255,10 +259,11 @@ class GuzikOScopeWindow(Window):
         self.continous = False
         self.averaging = False
         return None
-
     def updateModes(self):
         domain = self.comboBox_CurrentDomain.currentText()
         modes = self.scope.getAvailableModes()
+
+        modes = {i:modes[i] for i in sorted(modes, key=lambda k : modes[k].modeName)}
 
         for i in range(self.comboBox_CurrentMode.count()):
             self.comboBox_CurrentMode.removeItem(0)
@@ -282,6 +287,7 @@ class GuzikOScopeWindow(Window):
         self.label_CurrentDomainValue.setText(list(self.scope.getCurrentMode().values())[0].modeDomain)
         self.label_CurrentModeValue.setText(list(self.scope.getCurrentMode().values())[0].modeName)
         self.updatePlotTypes()
+        self.clearPlot()
         return None
 
     def clearPlot(self):
@@ -296,6 +302,8 @@ class GuzikOScopeWindow(Window):
     def updatePlotTypes(self):
         dimension = self.label_CurrentPlotDimensionValue.text()
         plotTypes = self.scope.getAvailablePlots()
+
+        plotTypes = {i:plotTypes[i] for i in sorted(plotTypes, key=lambda k : plotTypes[k].plotName)}
 
         for i in range(self.comboBox_PlotType.count()):
             self.comboBox_PlotType.removeItem(0)

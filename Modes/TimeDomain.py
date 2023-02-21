@@ -23,10 +23,7 @@ class TimeSeries(BlankMode):
     def __init__(self,guzik):
 
         super(TimeSeries,self).__init__(guzik)
-
-
-
-        self.plotType = "line"
+        return None
 
     def __repr__(self):
         return "<TimeSeries object at %s>"%str(hex(id(self)))

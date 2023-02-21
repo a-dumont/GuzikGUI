@@ -33,7 +33,7 @@ class GuzikOScope(object):
         self._buffer = None
 
         self.setCurrentMode('TimeSeries')
-        self.setCurrentPlot('BlankPlot')
+        self.setCurrentPlot('OneDimPlot')
 
         return None
 
@@ -106,18 +106,20 @@ class GuzikOScopeWindow(Window):
     def __init__(self):
         super(GuzikOScopeWindow,self).__init__()
 
-        self.scope = GuzikOScope(None, self.fig, self.axes)
+        self.scope = GuzikOScope(self.loadGuzik(), self.fig, self.axes)
         self.readConfigGuzik()
 
         self.setupGuzikTab()
         self.setupAcquisitionTab()
+        self.setupModeTab()
+        self.setupPlotTab()
 
         self.continous = False
+        self.averaging = False
 
         return None
 
     def setupGuzikTab(self):
-        self.pushButton_LoadGuzik.clicked.connect(self.loadGuzik)
         self.pushButton_ReadConfigGuzik.clicked.connect(self.readConfigGuzik)
         self.pushButton_UpdateConfigGuzik.clicked.connect(self.updateConfigGuzik)
         return None
@@ -129,13 +131,29 @@ class GuzikOScopeWindow(Window):
         return None
 
     def setupModeTab(self):
+        self.updateModes()
+        self.label_CurrentDomainValue.setText(list(self.scope.getCurrentMode().values())[0].modeDomain)
+        self.label_CurrentModeValue.setText(list(self.scope.getCurrentMode().values())[0].modeName)
+        self.comboBox_CurrentDomain.currentTextChanged.connect(self.updateModes)
+        self.pushButton_SetMode.clicked.connect(self.setMode)
         return None
 
     def setupPlotTab(self):
+        self.pushButton_ClearPlot.clicked.connect(self.clearPlot)
+        self.pushButton_UpdatePlotType.clicked.connect(self.setPlotType)
+        self.label_CurrentPlotDimensionValue.setText(getattr(self.scope,'_currentMode').modeDimension)
+        self.updatePlotTypes()
+        self.label_CurrentPlotTypeValue.setText(self.scope._currentPlot.plotName)
         return None
 
     def loadGuzik(self):
-        return None
+        try:
+            guzik = instuments.guzik_adp7104()
+            self.label_GuzikType.setText("Guzik ADP7104")
+        except:
+            guzik = Modes.dummy_guzik()
+            self.label_GuzikType.setText("Instance of dummy_guzik")
+        return guzik
 
     def updateConfigGuzik(self):
         channels = []
@@ -158,7 +176,7 @@ class GuzikOScopeWindow(Window):
 
         self.scope.guzik.config(channels=channels,gain_dB=gain_dB,n_S_ch=n_S_ch,bits_16=bits_16)
         self.scope.setCurrentMode(list(self.scope.getCurrentMode().keys())[0])
-        self.scope.setCurrentPlot(list(self.scope.getCurrentPlot().keys())[0])
+        self.clearPlot()
         return None
 
     def readConfigGuzik(self):
@@ -190,8 +208,7 @@ class GuzikOScopeWindow(Window):
         return None
 
     def acquisitionSingle(self):
-        self.continous = False
-        self.averaging = False
+        self.acquisitionStop()
         if self.comboBox_Averaging.currentIndex() == 0:
             self.scope()
         else:
@@ -212,6 +229,7 @@ class GuzikOScopeWindow(Window):
         return None
 
     def acquisitionContinuous(self):
+        self.acquisitionStop()
         self.continous = True
         if self.comboBox_Averaging.currentIndex() == 0:
             while self.continous == True:
@@ -238,7 +256,67 @@ class GuzikOScopeWindow(Window):
         self.averaging = False
         return None
 
+    def updateModes(self):
+        domain = self.comboBox_CurrentDomain.currentText()
+        modes = self.scope.getAvailableModes()
 
+        for i in range(self.comboBox_CurrentMode.count()):
+            self.comboBox_CurrentMode.removeItem(0)
+
+        if domain == "Time":
+            for key in modes.keys():
+                if modes[key].modeDomain == "Time":
+                    self.comboBox_CurrentMode.addItem(modes[key].modeName,key)
+
+        if domain == "Frequency":
+            for key in modes.keys():
+                if modes[key].modeDomain == "Frequency":
+                    self.comboBox_CurrentMode.addItem(modes[key].modeName,key)
+
+        return None
+
+    def setMode(self):
+        modeStr = self.comboBox_CurrentMode.currentData()
+        self.scope.setCurrentMode(modeStr)
+        self.scope.setCurrentPlot(self.scope.getCurrentMode()[modeStr].plotType)
+        self.label_CurrentDomainValue.setText(list(self.scope.getCurrentMode().values())[0].modeDomain)
+        self.label_CurrentModeValue.setText(list(self.scope.getCurrentMode().values())[0].modeName)
+        self.updatePlotTypes()
+        return None
+
+    def clearPlot(self):
+        self.scope.setCurrentPlot(list(self.scope.getCurrentPlot().keys())[0])
+        for ax in self.axes:
+            for line in ax.lines:
+                line.set_ydata(line.get_ydata()*0)
+        self.fig.canvas.draw_idle()
+        self.fig.canvas.flush_events()
+        return None
+
+    def updatePlotTypes(self):
+        dimension = self.label_CurrentPlotDimensionValue.text()
+        plotTypes = self.scope.getAvailablePlots()
+
+        for i in range(self.comboBox_PlotType.count()):
+            self.comboBox_PlotType.removeItem(0)
+
+        if dimension == "1D":
+            for key in plotTypes.keys():
+                if plotTypes[key].plotDimension == "1D":
+                    self.comboBox_PlotType.addItem(plotTypes[key].plotName,key)
+
+        if dimension == "2D":
+            for key in plotTypes.keys():
+                if plotTypes[key].plotDimension == "2D":
+                    self.comboBox_PlotType.addItem(plotTypes[key].plotName,key)
+
+        return None
+
+    def setPlotType(self):
+        plotStr = self.comboBox_PlotType.currentData()
+        self.scope.setCurrentPlot(plotStr)
+        self.label_CurrentPlotTypeValue.setText(self.scope._currentPlot.plotName)
+        return None
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

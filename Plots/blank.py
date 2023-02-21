@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class BlankPlot(object):
+
+    plotDimension = "1D"
+    plotName = "Blank Plot"
+
     def __init__(self, fig=None, axes=None):
         plt.ion()
         if fig == None and axes == None:
@@ -83,7 +87,6 @@ class BlankPlot(object):
         for i in range(N):
             xData = _input[i]['xData']
             yData = _input[i]['yData']
-            #assert len(xData) == len(yData), "x and y have different lengths."
             axes[0].plot(xData,yData,label=self.labels[i])
 
         for ax in axes:

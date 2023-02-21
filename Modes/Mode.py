@@ -45,21 +45,21 @@ class dummy_guzik(object):
     def __call__(self):
         out = np.zeros((self.config()['Nch'],self.config()['n_S_ch']),dtype=np.uint8)
         for i in range(out.shape[0]):
-            out[i] = np.random.randint(0,255,self.config()['n_S_ch'],dtype=np.uint8)
+            out[i] = np.random.randint(0,256,self.config()['n_S_ch'],dtype=np.uint8)
         return out
 
 class BlankMode(object):
 
-    _domain = "Time"
+    modeDomain = "Time"
+    modeName = "Blank"
+    modeCategory = "None"
+    modeDescription = "A blank mode used as a base."
+    plotType = "BlankPlot"
+    modeDimension = "1D"
+
     def __init__(self, guzik):
-
-        self.modeName = "Blank"
-        self.modeCategory = "None"
-        self.modeDescription = "A blank mode used as a base."
-
-        self.plotType = "1D plot"
-
         self.guzik = guzik
+        return None
 
     def __repr__(self):
         return "<Mode object at %s>"%str(hex(id(self)))

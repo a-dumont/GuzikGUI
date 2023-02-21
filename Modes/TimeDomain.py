@@ -13,14 +13,18 @@ except:
 
 class TimeSeries(BlankMode):
 
-    _domain = "Time"
+    modeDomain = "Time"
+    modeName = "Time series"
+    modeCategory = "Time domain"
+    modeDescription = "A mode for raw time domain measurements."
+    plotType = "OneDimPlot"
+    modeDimension = "1D"
+
     def __init__(self,guzik):
 
         super(TimeSeries,self).__init__(guzik)
 
-        self.modeName = "Time series"
-        self.modeCategory = "Time domain"
-        self.modeDescription = "A mode for raw time domain measurements."
+
 
         self.plotType = "line"
 
@@ -89,16 +93,16 @@ class TimeSeries(BlankMode):
 
 class OneDimHistogram(BlankMode):
 
-    _domain = "Time"
+    modeDomain = "Time"
+    modeName = "1D Histogram"
+    modeCategory = "Time domain"
+    modeDescription = "A mode for 1D time domain histograms."
+    plotType = "OneDimPlot"
+    modeDimension = "1D"
+
     def __init__(self,guzik):
 
         super(OneDimHistogram,self).__init__(guzik)
-
-        self.modeName = "1D Histogram"
-        self.modeCategory = "Time domain"
-        self.modeDescription = "A mode for 1D time domain histograms."
-
-        self.plotType = "line"
 
         if self.guzik.config()["bits_16"] is True:
             self.nbits = 16
@@ -176,16 +180,16 @@ class OneDimHistogram(BlankMode):
 
 class TwoDimHistogram(BlankMode):
 
-    _domain = "Time"
+    modeDomain = "Time"
+    modeName = "2D Histogram"
+    modeCategory = "Time domain"
+    modeDescription = "A mode for 2D time domain histograms."
+    plotType = "TwoDimPlot"
+    modeDimension = "2D"
+
     def __init__(self,guzik):
 
         super(TwoDimHistogram,self).__init__(guzik)
-
-        self.modeName = "2D Histogram"
-        self.modeCategory = "Time domain"
-        self.modeDescription = "A mode for 2D time domain histograms."
-
-        self.plotType = "colormap"
 
         if self.guzik.config()["bits_16"] is True:
             self.nbits = 16
@@ -237,7 +241,7 @@ class TwoDimHistogram(BlankMode):
 
     def getDummyOutput(self):
 
-        Nch = 2 
+        Nch = 2
         n_S_ch = self.guzik.config()['n_S_ch']
 
         if self.guzik.config()['bits_16'] == True:

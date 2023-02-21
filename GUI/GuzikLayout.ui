@@ -74,9 +74,9 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_LoadGuzik">
+           <widget class="QLabel" name="label_GuzikType">
             <property name="text">
-             <string>Load Guzik</string>
+             <string>Dummy Guzik</string>
             </property>
            </widget>
           </item>
@@ -362,7 +362,7 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_15">
           <item>
-           <widget class="QLabel" name="label_CurrentDomain">
+           <widget class="QLabel" name="label_DomainSelect">
             <property name="text">
              <string>Domain</string>
             </property>
@@ -387,7 +387,7 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <item>
-           <widget class="QLabel" name="label_CurrentMode">
+           <widget class="QLabel" name="label_ModeSelect">
             <property name="text">
              <string>Mode</string>
             </property>
@@ -398,12 +398,132 @@
           </item>
          </layout>
         </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_17">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QLabel" name="label_CurrentDomain">
+              <property name="text">
+               <string>Current domain:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_CurrentDomainValue">
+              <property name="text">
+               <string>Domain</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <item>
+             <widget class="QLabel" name="label_CurrentMode">
+              <property name="text">
+               <string>Current Mode:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_CurrentModeValue">
+              <property name="text">
+               <string>Mode</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_SetMode">
+            <property name="text">
+             <string>Set Mode</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tabPlot">
        <attribute name="title">
         <string>Plot</string>
        </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_13">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_18">
+          <item>
+           <widget class="QLabel" name="label_CurrentPlotDimension">
+            <property name="text">
+             <string>Dimension</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_CurrentPlotDimensionValue">
+            <property name="text">
+             <string>Dimension value</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::AutoText</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_20">
+          <item>
+           <widget class="QLabel" name="label_PlotType">
+            <property name="text">
+             <string>Plot type</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_PlotType"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_19">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
+            <item>
+             <widget class="QLabel" name="label_CurrentPlotType">
+              <property name="text">
+               <string>Current plot type:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_CurrentPlotTypeValue">
+              <property name="text">
+               <string>type</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_UpdatePlotType">
+            <property name="text">
+             <string>Update plot type</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_ClearPlot">
+            <property name="text">
+             <string>Clear plot</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>

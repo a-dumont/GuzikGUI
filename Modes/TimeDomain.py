@@ -2,7 +2,7 @@
 Time Series measurement.
 """
 import numpy as np
-from .Mode import Mode
+from .Mode import BlankMode
 from SignalProcessing.histograms import digitizer_histogram
 from SignalProcessing.histograms import digitizer_histogram2D
 try:
@@ -11,8 +11,9 @@ except:
     def get(guzik):
         return guzik()
 
-class TimeSeries(Mode):
+class TimeSeries(BlankMode):
 
+    _domain = "Time"
     def __init__(self,guzik):
 
         super(TimeSeries,self).__init__(guzik)
@@ -57,8 +58,38 @@ class TimeSeries(Mode):
 
         return output
 
-class OneDimHistogram(Mode):
+    def getDummyOutput(self):
 
+        Nch = self.guzik.config()['Nch']
+        n_S_ch = self.guzik.config()['n_S_ch']
+
+        if self.guzik.config()['bits_16'] == True:
+            data = np.zeros((Nch,n_S_ch),dtype=np.int16)
+        else:
+            data = np.zeros((Nch,n_S_ch),dtype=np.uint8)
+
+        output = [None for i in range(data.shape[0])]
+
+        ch = self.guzik.config()["channels"]
+        ch = ch.split(",")
+        xData = self.getXData()
+
+        for i in range(len(output)):
+            out = {}
+            out['xData'] = xData
+            out["yData"] = data[i]
+            out["xLabel"] = "Time"
+            out["xUnit"] = "[s]"
+            out["yLabel"] = "Voltage"
+            out["yUnit"] = "[V]"
+            out["label"] = "Channel %s"%ch[i][-1]
+            output[i] = out
+
+        return output
+
+class OneDimHistogram(BlankMode):
+
+    _domain = "Time"
     def __init__(self,guzik):
 
         super(OneDimHistogram,self).__init__(guzik)
@@ -105,7 +136,7 @@ class OneDimHistogram(Mode):
             out["xUnit"] = ""
             out["yLabel"] = "Count"
             out["yUnit"] = ""
-            out["label"] = "Channel %s"%ch[i]
+            out["label"] = "Channel %s"%ch[i][-1]
             output[i] = out
 
         return output
@@ -113,8 +144,39 @@ class OneDimHistogram(Mode):
     def getXData(self):
         return np.linspace(0,(1<<self.nbits_out)-1,1<<self.nbits_out)
 
-class TwoDimHistogram(Mode):
+    def getDummyOutput(self):
 
+        Nch = self.guzik.config()['Nch']
+        n_S_ch = self.guzik.config()['n_S_ch']
+
+        if self.guzik.config()['bits_16'] == True:
+            data = np.zeros((Nch,n_S_ch),dtype=np.int16)
+        else:
+            data = np.zeros((Nch,n_S_ch),dtype=np.uint8)
+
+        output = [None for i in range(data.shape[0])]
+
+        ch = self.guzik.config()["channels"]
+        ch = ch.split(",")
+        xData = self.getXData()
+
+        for i in range(len(output)):
+            out = {}
+            out['xData'] = xData
+            out["yData"] = digitizer_histogram(data[i],self.nbits)[0:1<<self.nbits_out]
+            out["xLabel"] = "Bin"
+            out["xUnit"] = ""
+            out["yLabel"] = "Count"
+            out["yUnit"] = ""
+            out["label"] = "Channel %s"%ch[i][-1]
+            output[i] = out
+
+        return output
+
+
+class TwoDimHistogram(BlankMode):
+
+    _domain = "Time"
     def __init__(self,guzik):
 
         super(TwoDimHistogram,self).__init__(guzik)
@@ -172,3 +234,35 @@ class TwoDimHistogram(Mode):
     def getYData(self):
         y = np.linspace(0,(1<<self.nbits_out)-1,1<<self.nbits_out)
         return y
+
+    def getDummyOutput(self):
+
+        Nch = 2 
+        n_S_ch = self.guzik.config()['n_S_ch']
+
+        if self.guzik.config()['bits_16'] == True:
+            data = np.zeros((Nch,n_S_ch),dtype=np.int16)
+        else:
+            data = np.zeros((Nch,n_S_ch),dtype=np.uint8)
+
+        output = [None]
+
+        ch = self.guzik.config()["channels"]
+        ch = ch.split(",")
+        xData = self.getXData()
+
+        out = {}
+        out['xData'] = xData
+        out['yData'] = yData
+        out["zData"] = digitizer_histogram2D(data[0],data[1],self.nbits)[0:1<<self.nbits_out,0:1<<self.nbits_out]
+        out["xLabel"] = "Channel %s"%ch[0][-1]
+        out["xUnit"] = "[Bin]"
+        out["yLabel"] = "Channel %s"%ch[1][-1]
+        out["yUnit"] = "[Bin]"
+        out['zLabel'] = 'Count'
+        out['zUnit'] = ''
+        out["label"] = ""
+        output[0] = out
+
+        return output
+

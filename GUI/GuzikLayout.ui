@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1063</width>
+    <height>781</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Guzik-O-Scope</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QWidget" name="mpl_widget" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>600</height>
+         </size>
+        </property>
+        <layout class="QVBoxLayout" name="mpl_layout"/>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>150</height>
+       </size>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="tabBarAutoHide">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="tabGuzik">
+       <attribute name="title">
+        <string>Guzik</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_GuzikConfig">
+            <property name="text">
+             <string>Config</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_LoadGuzik">
+            <property name="text">
+             <string>Load Guzik</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_ReadConfigGuzik">
+            <property name="text">
+             <string>Read config</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_UpdateConfigGuzik">
+            <property name="text">
+             <string>Update config</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="labelChannels">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string>Channels</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QCheckBox" name="checkBox_Channel1">
+              <property name="text">
+               <string>Channel 1</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_Channel2">
+              <property name="text">
+               <string>Channel 2</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QCheckBox" name="checkBox_Channel3">
+              <property name="text">
+               <string>Channel 3</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_Channel4">
+              <property name="text">
+               <string>Channel 4</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <widget class="QLabel" name="label_Gain">
+                <property name="text">
+                 <string>Gain (dB)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_8">
+                <item>
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox_Gain1">
+                  <property name="minimum">
+                   <double>-25.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>32.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox_Gain2">
+                  <property name="minimum">
+                   <double>-25.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>32.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_7">
+                <item>
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox_Gain3">
+                  <property name="minimum">
+                   <double>-25.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>32.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox_Gain4">
+                  <property name="minimum">
+                   <double>-25.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>32.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_10">
+              <item>
+               <widget class="QLabel" name="label_n_S_ch">
+                <property name="text">
+                 <string>Samples</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBox_Samples">
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+                <property name="buttonSymbols">
+                 <enum>QAbstractSpinBox::UpDownArrows</enum>
+                </property>
+                <property name="maximum">
+                 <number>429496729</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_13">
+              <item>
+               <widget class="QLabel" name="label_16bits">
+                <property name="text">
+                 <string>16 Bits</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboBox_16bits">
+                <item>
+                 <property name="text">
+                  <string>False</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>True</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabAcquisition" native="true">
+       <attribute name="title">
+        <string>Acquisition</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <item>
+           <widget class="QLabel" name="label_Averaging">
+            <property name="text">
+             <string>Averaging</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_Averaging">
+            <item>
+             <property name="text">
+              <string>False</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>True</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="spinBox_Averaging">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>1000</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_16">
+          <item>
+           <widget class="QPushButton" name="pushButtonSingle">
+            <property name="text">
+             <string>Single</string>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
+            </property>
+            <property name="default">
+             <bool>false</bool>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButtonContinous">
+            <property name="text">
+             <string>Continuous</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButtonStop">
+            <property name="text">
+             <string>Stop</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabMode">
+       <attribute name="title">
+        <string>Mode</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_9">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_15">
+          <item>
+           <widget class="QLabel" name="label_CurrentDomain">
+            <property name="text">
+             <string>Domain</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_CurrentDomain">
+            <item>
+             <property name="text">
+              <string>Time</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Frequency</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_14">
+          <item>
+           <widget class="QLabel" name="label_CurrentMode">
+            <property name="text">
+             <string>Mode</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_CurrentMode"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabPlot">
+       <attribute name="title">
+        <string>Plot</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1063</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

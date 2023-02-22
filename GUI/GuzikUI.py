@@ -3,9 +3,11 @@ import sys
 from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox
 
 from matplotlib.backends.qt_compat import QtWidgets
-from matplotlib.backends.backend_qtagg import (
-    FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
-#from matplotlib.figure import Figure
+try:
+    from matplotlib.backends.backend_qtagg import (FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
+except:
+    from matplotlib.backends.backend_qt5agg import (FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
+
 import matplotlib.pyplot as plt
 
 from .GuzikLayout import Ui_MainWindow

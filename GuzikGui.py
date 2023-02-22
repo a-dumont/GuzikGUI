@@ -8,10 +8,13 @@ import threading
 from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox
 
 import Modes
-del Modes.BlankMode
-
 import Plots
-del Plots.BlankPlot
+
+try:
+    del Plots.BlankPlot
+    del Modes.BlankMode
+except:
+    pass
 
 from GUI import Window
 
@@ -152,7 +155,8 @@ class GuzikOScopeWindow(Window):
 
     def loadGuzik(self):
         try:
-            guzik = instuments.guzik_adp7104()
+            from pyHegel.instruments import guzik_adp7104
+            guzik = guzik_adp7104()
             self.label_GuzikType.setText("Guzik ADP7104")
         except:
             guzik = Modes.dummy_guzik()
@@ -330,8 +334,13 @@ class GuzikOScopeWindow(Window):
         self.label_CurrentPlotTypeValue.setText(self.scope._currentPlot.plotName)
         return None
 
-if __name__ == "__main__":
+def launch():
     app = QApplication(sys.argv)
     win = GuzikOScopeWindow()
     win.show()
-    sys.exit(app.exec())
+    return app, win
+#if __name__ == "__main__":
+#    app = QApplication(sys.argv)
+#    win = GuzikOScopeWindow()
+#    win.show()
+#    sys.exit(app.exec())

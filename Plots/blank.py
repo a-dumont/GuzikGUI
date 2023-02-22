@@ -97,7 +97,10 @@ class BlankPlot(object):
         for ax in axes:
             ax.set_xlabel('%s %s'%(self.xLabel,self.xUnit))
             ax.set_ylabel('%s %s'%(self.yLabel,self.yUnit))
-            ax.legend(ncols=N,loc="upper center")
+            try:
+                ax.legend(ncols=N,loc="upper center")
+            except:
+                ax.legend(loc="upper center")
 
         return None
 

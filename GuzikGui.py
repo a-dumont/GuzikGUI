@@ -220,7 +220,7 @@ class GuzikOScopeWindow(Window):
         self.acquisitionStop()
         self.scope()
         if self.comboBox_Averaging.currentIndex() != 0:
-            n = 1
+            n = 1.0
             self.averaging = True
             self.scope()
             _buffer = self.scope.getData()
@@ -232,7 +232,7 @@ class GuzikOScopeWindow(Window):
                             _buffer[i][key] = (n*_buffer[i][key]+_buffer2[i][key])/(n+1)
                 setattr(self.scope,'_buffer',_buffer)
                 self.scope.updatePlot(rescale=False)
-                n += 1
+                n += 1.0
             self.averaging = False
         return None
 
@@ -243,7 +243,7 @@ class GuzikOScopeWindow(Window):
             while self.continous == True:
                 self.scope()
         else:
-            n = 1
+            n = 1.0
             self.averaging = True
             self.scope()
             _buffer = getattr(self.scope,'_buffer')
@@ -255,7 +255,7 @@ class GuzikOScopeWindow(Window):
                             _buffer[i][key] = (n*_buffer[i][key]+_buffer2[i][key])/(n+1)
                 setattr(self.scope,'_buffer',_buffer)
                 self.scope.updatePlot(rescale=False)
-                n += 1
+                n += 1.0
             self.averaging = False
         return None
 

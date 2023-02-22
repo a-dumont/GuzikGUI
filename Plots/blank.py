@@ -10,7 +10,9 @@ class BlankPlot(object):
     plotName = "Blank Plot"
 
     def __init__(self, fig=None, axes=None):
+
         plt.ion()
+
         if fig == None and axes == None:
             fig, ax = plt.subplots()
             self.fig = fig
@@ -62,13 +64,16 @@ class BlankPlot(object):
         return xLabels[0], xUnits[0], yLabels[0], yUnits[0], labels
 
     def checkMetadata(self, metadata):
+
         assert metadata[0] == self.xLabel, "xLabel has changed."
         assert metadata[1] == self.xUnit, "xUnit has changed."
         assert metadata[2] == self.yLabel, "yLabel has changed."
         assert metadata[3] == self.yUnit, "yUnit has changed."
+
         return None
 
     def initialOutput(self, _input):
+
         fig = self.fig
         axes = self.axes
 
@@ -97,6 +102,7 @@ class BlankPlot(object):
         return None
 
     def updatePlot(self, _input, rescale=True):
+
         fig = self.fig
         axes = self.axes
 

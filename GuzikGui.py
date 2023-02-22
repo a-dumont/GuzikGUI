@@ -77,7 +77,7 @@ class GuzikOScope(object):
         assert modeStr in availableModes.keys(), "Mode %s not in available modes."%modeStr
         currentMode = availableModes[modeStr](self.guzik)
         setattr(self,'_currentMode',currentMode)
-        setattr(self,'_buffer',currentMode.getDummyOutput())
+        setattr(self,'_buffer',currentMode.output)
         return
 
     def getCurrentMode(self):
@@ -160,6 +160,7 @@ class GuzikOScopeWindow(Window):
         return guzik
 
     def updateConfigGuzik(self):
+        self.acquisitionStop()
         channels = []
         gain_dB = []
         if self.checkBox_Channel1.isChecked() == True:
@@ -213,13 +214,12 @@ class GuzikOScopeWindow(Window):
 
     def acquisitionSingle(self):
         self.acquisitionStop()
-        if self.comboBox_Averaging.currentIndex() == 0:
-            self.scope()
-        else:
+        self.scope()
+        if self.comboBox_Averaging.currentIndex() != 0:
             n = 1
             self.averaging = True
             self.scope()
-            _buffer = getattr(self.scope,'_buffer')
+            _buffer = self.scope.getData()
             while n < self.spinBox_Averaging.value() and self.averaging == True:
                 _buffer2 = self.scope.getNewData()
                 for i in range(len(_buffer)):
@@ -259,6 +259,7 @@ class GuzikOScopeWindow(Window):
         self.continous = False
         self.averaging = False
         return None
+
     def updateModes(self):
         domain = self.comboBox_CurrentDomain.currentText()
         modes = self.scope.getAvailableModes()
@@ -281,6 +282,7 @@ class GuzikOScopeWindow(Window):
         return None
 
     def setMode(self):
+        self.acquisitionStop()
         modeStr = self.comboBox_CurrentMode.currentData()
         self.scope.setCurrentMode(modeStr)
         self.scope.setCurrentPlot(self.scope.getCurrentMode()[modeStr].plotType)
@@ -291,6 +293,7 @@ class GuzikOScopeWindow(Window):
         return None
 
     def clearPlot(self):
+        self.acquisitionStop()
         self.scope.setCurrentPlot(list(self.scope.getCurrentPlot().keys())[0])
         for ax in self.axes:
             for line in ax.lines:
@@ -321,6 +324,7 @@ class GuzikOScopeWindow(Window):
         return None
 
     def setPlotType(self):
+        self.acquisitionStop()
         plotStr = self.comboBox_PlotType.currentData()
         self.scope.setCurrentPlot(plotStr)
         self.label_CurrentPlotTypeValue.setText(self.scope._currentPlot.plotName)
@@ -329,9 +333,5 @@ class GuzikOScopeWindow(Window):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     win = GuzikOScopeWindow()
-    #win.scope.setCurrentMode('OneDimHistogram')
-    #win.scope.setCurrentPlot('BlankPlot')
     win.show()
-    for i in range(100):
-        win.scope()
     sys.exit(app.exec())

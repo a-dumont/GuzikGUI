@@ -15,6 +15,7 @@ class dummy_guzik(object):
         self._config['channels'] = "CH1, CH3"
         self._config['bits_16'] = False
         self._config['sampling_rate_GSs'] = 32
+        self._config['sampling_period_ns'] = 0.03125
         self._config['n_S_ch'] = 1024
         self._config['gain_dB'] = [12.3,22.1]
         return None
@@ -52,13 +53,21 @@ class BlankMode(object):
 
     modeDomain = "Time"
     modeName = "Blank"
-    modeCategory = "None"
-    modeDescription = "A blank mode used as a base."
     plotType = "BlankPlot"
     modeDimension = "1D"
 
+    outFmt = {}
+    outFmt['xData'] = None
+    outFmt["yData"] = None
+    outFmt["xLabel"] = "Time"
+    outFmt["xUnit"] = "[s]"
+    outFmt["yLabel"] = "Voltage"
+    outFmt["yUnit"] = "[Bin]"
+    outFmt["label"] = None
+
     def __init__(self, guzik):
         self.guzik = guzik
+        self.output = self._initializeOutput()
         return None
 
     def __repr__(self):
@@ -74,69 +83,35 @@ class BlankMode(object):
         if self.guzik.config()["Nch"] == 1:
             data = np.array([data])
 
-        output = [None for i in range(data.shape[0])]
-
         ch = self.guzik.config()["channels"]
         ch = ch.split(",")
-        xData = self.getXData()
 
-        for i in range(len(output)):
-            out = {}
-            out['xData'] = xData
-            out["yData"] = data[i]
-            out["xLabel"] = "Time"
-            out["xUnit"] = "[s]"
-            out["yLabel"] = "Voltage"
-            out["yUnit"] = "[V]"
-            out["label"] = "Channel %s"%ch[i][-1]
-            output[i] = out
+        assert len(ch) == len(self.output), "Number of channels and outputs do not match."
 
-        return output
+        for i in range(len(self.output)):
+            self.output[i]['yData'] = data[i]
 
-    def getDummyOutput(self):
+        return [out.copy() for out in self.output]
 
+    def _initializeOutput(self):
         Nch = self.guzik.config()['Nch']
         n_S_ch = self.guzik.config()['n_S_ch']
+        ch = self.guzik.config()["channels"]
+        ch = ch.split(",")
+        dt = self.guzik.config()['sampling_period_ns']*1e-9
 
         if self.guzik.config()['bits_16'] == True:
             data = np.zeros((Nch,n_S_ch),dtype=np.int16)
         else:
             data = np.zeros((Nch,n_S_ch),dtype=np.uint8)
 
-        output = [None for i in range(data.shape[0])]
+        output = [self.outFmt.copy() for i in range(data.shape[0])]
 
-        ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
-        xData = self.getXData()
+        xData = np.linspace(0,n_S_ch*dt,n_S_ch)
 
         for i in range(len(output)):
-            out = {}
-            out['xData'] = xData
-            out["yData"] = data[i]
-            out["xLabel"] = "Time"
-            out["xUnit"] = "[s]"
-            out["yLabel"] = "Voltage"
-            out["yUnit"] = "[V]"
-            out["label"] = "Channel %s"%ch[i][-1]
-            output[i] = out
+            output[i]['xData'] = xData
+            output[i]["yData"] = data[i]
+            output[i]["label"] = "Channel %s"%ch[i][-1]
 
         return output
-
-    def getXData(self):
-        N = self.guzik.config()["n_S_ch"]
-        dt = 1.0/self.guzik.config()["sampling_rate_GSs"]/1e9
-        return np.linspace(0,N*dt,N)
-
-    #def updateConfig(self, newConfig):
-
-        #config = self.guzik.config()
-        #for key in newConfig.keys():
-        #    assert key in config.keys(), "Key %s not in config"%key
-        #    config[key] = newConfig[key]
-        #self.guzik.config(**config)
-
-    def printConfig(self):
-
-        config = self.guzik.config()
-        for key in config.keys():
-            print("%s: %s"%(key,str(config[key])))

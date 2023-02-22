@@ -15,14 +15,22 @@ class TimeSeries(BlankMode):
 
     modeDomain = "Time"
     modeName = "Time series"
-    modeCategory = "Time domain"
-    modeDescription = "A mode for raw time domain measurements."
     plotType = "OneDimPlot"
     modeDimension = "1D"
 
+    outFmt = {}
+    outFmt['xData'] = None
+    outFmt["yData"] = None
+    outFmt["xLabel"] = "Time"
+    outFmt["xUnit"] = "[s]"
+    outFmt["yLabel"] = "Voltage"
+    outFmt["yUnit"] = "[V]"
+    outFmt["label"] = None
+
     def __init__(self,guzik):
 
-        super(TimeSeries,self).__init__(guzik)
+        self.guzik = guzik
+        self.output = self._initializeOutput()
         return None
 
     def __repr__(self):
@@ -38,53 +46,36 @@ class TimeSeries(BlankMode):
         if self.guzik.config()["Nch"] == 1:
             data = np.array([data])
 
-        output = [None for i in range(data.shape[0])]
-
         ch = self.guzik.config()["channels"]
         ch = ch.split(",")
-        xData = self.getXData()
 
-        assert len(ch) == len(output), "Number of channels and outputs do not match."
+        assert len(ch) == len(self.output), "Number of channels and outputs do not match."
 
-        for i in range(len(output)):
-            out = {}
-            out['xData'] = xData
-            out["yData"] = data[i]
-            out["xLabel"] = "Time"
-            out["xUnit"] = "[s]"
-            out["yLabel"] = "Voltage"
-            out["yUnit"] = "[V]"
-            out["label"] = "Channel %s"%ch[i][-1]
-            output[i] = out
+        for i in range(len(self.output)):
+            self.output[i]['yData'] = data[i]
 
-        return output
+        return [out.copy() for out in self.output]
 
-    def getDummyOutput(self):
-
+    def _initializeOutput(self):
         Nch = self.guzik.config()['Nch']
         n_S_ch = self.guzik.config()['n_S_ch']
+        ch = self.guzik.config()["channels"]
+        ch = ch.split(",")
+        dt = self.guzik.config()['sampling_period_ns']*1e-9
 
         if self.guzik.config()['bits_16'] == True:
             data = np.zeros((Nch,n_S_ch),dtype=np.int16)
         else:
             data = np.zeros((Nch,n_S_ch),dtype=np.uint8)
 
-        output = [None for i in range(data.shape[0])]
+        output = [self.outFmt.copy() for i in range(data.shape[0])]
 
-        ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
-        xData = self.getXData()
+        xData = np.linspace(0,n_S_ch*dt,n_S_ch)
 
         for i in range(len(output)):
-            out = {}
-            out['xData'] = xData
-            out["yData"] = data[i]
-            out["xLabel"] = "Time"
-            out["xUnit"] = "[s]"
-            out["yLabel"] = "Voltage"
-            out["yUnit"] = "[V]"
-            out["label"] = "Channel %s"%ch[i][-1]
-            output[i] = out
+            output[i]['xData'] = xData
+            output[i]["yData"] = data[i]
+            output[i]["label"] = "Channel %s"%ch[i][-1]
 
         return output
 
@@ -92,21 +83,23 @@ class OneDimHistogram(BlankMode):
 
     modeDomain = "Time"
     modeName = "1D Histogram"
-    modeCategory = "Time domain"
-    modeDescription = "A mode for 1D time domain histograms."
     plotType = "OneDimPlot"
     modeDimension = "1D"
 
+    outFmt = {}
+    outFmt['xData'] = None
+    outFmt["yData"] = None
+    outFmt["xLabel"] = "Bin"
+    outFmt["xUnit"] = ""
+    outFmt["yLabel"] = "Count"
+    outFmt["yUnit"] = ""
+    outFmt["label"] = None
+
     def __init__(self,guzik):
 
-        super(OneDimHistogram,self).__init__(guzik)
-
-        if self.guzik.config()["bits_16"] is True:
-            self.nbits = 16
-            self.nbits_out = 10
-        else:
-            self.nbits = 8
-            self.nbits_out = 8
+        self.guzik = guzik
+        self.output = self._initializeOutput()
+        return None
 
     def __repr__(self):
         return "<1DHistogram object at %s>"%str(hex(id(self)))
@@ -121,59 +114,44 @@ class OneDimHistogram(BlankMode):
         if self.guzik.config()["Nch"] == 1:
             data = np.array([data])
 
-        output = [None for i in range(data.shape[0])]
-
         ch = self.guzik.config()["channels"]
         ch = ch.split(",")
-        xData = self.getXData()
 
-        assert len(ch) == len(output), "Number of channels and outputs do not match."
+        assert len(ch) == len(self.output), "Number of channels and outputs do not match."
 
-        for i in range(len(output)):
-            out = {}
-            out['xData'] = xData
-            out["yData"] = digitizer_histogram(data[i],self.nbits)[0:1<<self.nbits_out]
-            out["xLabel"] = "Bin"
-            out["xUnit"] = ""
-            out["yLabel"] = "Count"
-            out["yUnit"] = ""
-            out["label"] = "Channel %s"%ch[i][-1]
-            output[i] = out
+        for i in range(len(self.output)):
+            self.output[i]["yData"] = digitizer_histogram(data[i],self.nbits)[0:1<<self.nbits_out]
 
-        return output
+        return [out.copy() for out in self.output]
 
-    def getXData(self):
-        return np.linspace(0,(1<<self.nbits_out)-1,1<<self.nbits_out)
-
-    def getDummyOutput(self):
-
+    def _initializeOutput(self):
         Nch = self.guzik.config()['Nch']
         n_S_ch = self.guzik.config()['n_S_ch']
+        ch = self.guzik.config()["channels"]
+        ch = ch.split(",")
+
+        if self.guzik.config()["bits_16"] == True:
+            self.nbits = 16
+            self.nbits_out = 10
+        else:
+            self.nbits = 8
+            self.nbits_out = 8
 
         if self.guzik.config()['bits_16'] == True:
             data = np.zeros((Nch,n_S_ch),dtype=np.int16)
         else:
             data = np.zeros((Nch,n_S_ch),dtype=np.uint8)
 
-        output = [None for i in range(data.shape[0])]
+        output = [self.outFmt.copy() for i in range(data.shape[0])]
 
-        ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
-        xData = self.getXData()
+        xData = np.linspace(0,(1<<self.nbits_out)-1,1<<self.nbits_out)
 
         for i in range(len(output)):
-            out = {}
-            out['xData'] = xData
-            out["yData"] = digitizer_histogram(data[i],self.nbits)[0:1<<self.nbits_out]
-            out["xLabel"] = "Bin"
-            out["xUnit"] = ""
-            out["yLabel"] = "Count"
-            out["yUnit"] = ""
-            out["label"] = "Channel %s"%ch[i][-1]
-            output[i] = out
+            output[i]['xData'] = xData
+            output[i]["yData"] = digitizer_histogram(data[i],self.nbits)[0:1<<self.nbits_out]
+            output[i]["label"] = "Channel %s"%ch[i][-1]
 
         return output
-
 
 class TwoDimHistogram(BlankMode):
 

@@ -362,39 +362,156 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_15">
           <item>
-           <widget class="QLabel" name="label_DomainSelect">
-            <property name="text">
-             <string>Domain</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_17">
+            <item>
+             <widget class="QLabel" name="label_DomainSelect">
+              <property name="text">
+               <string>Domain</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_CurrentDomain">
+              <item>
+               <property name="text">
+                <string>Time</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Frequency</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox_CurrentDomain">
+           <layout class="QHBoxLayout" name="horizontalLayout_18">
             <item>
-             <property name="text">
-              <string>Time</string>
-             </property>
+             <widget class="QLabel" name="label_ModeSelect">
+              <property name="text">
+               <string>Mode</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <property name="text">
-              <string>Frequency</string>
-             </property>
+             <widget class="QComboBox" name="comboBox_CurrentMode"/>
             </item>
-           </widget>
+           </layout>
           </item>
          </layout>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <item>
-           <widget class="QLabel" name="label_ModeSelect">
-            <property name="text">
-             <string>Mode</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_15">
+            <item>
+             <widget class="QLabel" name="label_ModeParameters">
+              <property name="text">
+               <string>Parameters</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_ModeParameterSelect">
+              <property name="text">
+               <string>New value</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_ModeParameterCurrent">
+              <property name="text">
+               <string>Current value</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox_CurrentMode"/>
+           <layout class="QHBoxLayout" name="horizontalLayout_20">
+            <item>
+             <widget class="QLabel" name="label_ModeParameter1">
+              <property name="text">
+               <string>Parameter 1</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBox">
+              <property name="minimum">
+               <double>-100000000000.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>1000000000000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_ModeParameter1Value">
+              <property name="text">
+               <string>Value 1</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_21">
+            <item>
+             <widget class="QLabel" name="label_ModeParameter2">
+              <property name="text">
+               <string>Parameter 2</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+              <property name="minimum">
+               <double>-100000000000.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>100000000000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_ModeParameter2Value">
+              <property name="text">
+               <string>Value 2</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_19">
+            <item>
+             <widget class="QLabel" name="label_ModeParameter3">
+              <property name="text">
+               <string>Parameter 3</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+              <property name="minimum">
+               <double>-100000000000.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>100000000000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_ModeParameter3Value">
+              <property name="text">
+               <string>Value 3</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>

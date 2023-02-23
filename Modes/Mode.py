@@ -6,10 +6,19 @@ try:
         from pyHegel.commands import get
 except:
         def get(guzik):
+            """
+            Dummy get function.
+            """
             return guzik()
 
 class dummy_guzik(object):
+    """
+    This class is used to test without needing access to the real guzik.
+    """
     def __init__(self):
+        """
+        Implements parameters used by the module.
+        """
         self._config = dict()
         self._config['Nch'] = 2
         self._config['channels'] = "CH1, CH3"
@@ -21,6 +30,9 @@ class dummy_guzik(object):
         return None
 
     def config(self,**kwargs):
+        """
+        Mimics the behavior of the guzik_adp7104().config() method.
+        """
         if len(kwargs) == 0:
             return self._config
         else:
@@ -44,12 +56,53 @@ class dummy_guzik(object):
                 pass
 
     def __call__(self):
+        """
+        Works with the custom get() that is used when pyHegel is not found.
+        """
         out = np.zeros((self.config()['Nch'],self.config()['n_S_ch']),dtype=np.uint8)
         for i in range(out.shape[0]):
             out[i] = np.random.randint(0,256,self.config()['n_S_ch'],dtype=np.uint8)
         return out
 
 class BlankMode(object):
+    """
+    General Mode parameters and requirements.
+
+    Required parameters:
+        modeDomain,    str, Needed by the GUI to sort modes.
+        modeName,      str, Needed by the GUI to display mode in menus.
+        plotType,      str, Default plot class type. See Plots submodules for options.
+        modeDimension, str, Needed by the GUI to give relevant plotting options.
+        outFmt,       dict, Used to format the output.
+        kwargs,       dict, Used to modify the behavior of __call__.
+        output,       list, List of dictionaries using outFmt as a template.
+
+    outFmt:
+        'xData',  np.ndarray, x-axis data.
+        'yData',  np.ndarray, y-axis data.
+        'zData',  np.ndarray, z-axis data.  Used in 2D plots only.
+        'xLabel',        str, x-axis label.
+        'yLabel',        str, y-axis label.
+        'zLabel',        str, z-axis label. Used in 2D plots only.
+        'xUnit',         str, x-axis unit.
+        'yUnit',         str, y-axis unit.
+        'zUnit',         str, z-axis unit. Used in 2D plots only.
+        'label',         str, Used to label the curve on the plot.
+
+    kwargs:
+        Must contain at most three keys and values. The values must be numeric 
+        to be compatible with the GUI. This is a workaround to avoid having to 
+        pass arguments to __call__.
+
+    output:
+        A list of outFmt style dictionaries. This is used to return multiple lines 
+        at once. A simple usecase is to read and return the voltages on multiple 
+        channels in a single call.
+
+    All the above parameters need to be defined outside __init__ to be accessed by 
+    the GUI without instancing. For outFmt and kwargs the values can be changed during 
+    initialization but the keys should not be modified.
+    """
 
     modeDomain = "Time"
     modeName = "Blank"
@@ -65,7 +118,17 @@ class BlankMode(object):
     outFmt["yUnit"] = "[Bin]"
     outFmt["label"] = None
 
+    kwargs = {}
+    kwargs["Argument 1"] = 0
+    kwargs["Argument 2"] = 0
+    kwargs["Argument 3"] = 0
+
     def __init__(self, guzik):
+        """
+        Initializes the mode.
+        Parameters:
+            guzik: Instance of dummy_guzik or guzik_adp7104
+        """
         self.guzik = guzik
         self.output = self._initializeOutput()
         return None
@@ -77,7 +140,13 @@ class BlankMode(object):
         return "Blank mode"
 
     def __call__(self):
-
+        """
+        This function is used to get and return new data.
+        When outFmt is properly initialized this function should only update 
+        yData or zData (1D or 2D). Be sure to return a copy of self.output to avoid 
+        problems with the GUI's averaging or other operations.
+        """
+        kwargs = self.kwargs
         data = get(self.guzik)
 
         if self.guzik.config()["Nch"] == 1:
@@ -94,6 +163,10 @@ class BlankMode(object):
         return [out.copy() for out in self.output]
 
     def _initializeOutput(self):
+        """
+        Used to define the static values of outFmt and populate self.output 
+        accordingly.
+        """
         Nch = self.guzik.config()['Nch']
         n_S_ch = self.guzik.config()['n_S_ch']
         ch = self.guzik.config()["channels"]

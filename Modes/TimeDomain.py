@@ -27,6 +27,11 @@ class TimeSeries(BlankMode):
     outFmt["yUnit"] = "[V]"
     outFmt["label"] = None
 
+    kwargs = {}
+    kwargs["Argument 1"] = 0
+    kwargs["Argument 2"] = 0
+    kwargs["Argument 3"] = 0
+
     def __init__(self,guzik):
 
         self.guzik = guzik
@@ -94,6 +99,11 @@ class OneDimHistogram(BlankMode):
     outFmt["yLabel"] = "Count"
     outFmt["yUnit"] = ""
     outFmt["label"] = None
+
+    kwargs = {}
+    kwargs["Argument 1"] = 0
+    kwargs["Argument 2"] = 0
+    kwargs["Argument 3"] = 0
 
     def __init__(self,guzik):
 

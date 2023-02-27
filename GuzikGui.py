@@ -143,6 +143,7 @@ class GuzikOScopeWindow(Window):
         self.label_CurrentModeValue.setText(list(self.scope.getCurrentMode().values())[0].modeName)
         self.comboBox_CurrentDomain.currentTextChanged.connect(self.updateModes)
         self.pushButton_SetMode.clicked.connect(self.setMode)
+        self.getKwargs()
         return None
 
     def setupPlotTab(self):
@@ -264,6 +265,35 @@ class GuzikOScopeWindow(Window):
         self.averaging = False
         return None
 
+    def getKwargs(self):
+        kwargs = getattr(self.scope,"_currentMode").kwargs
+        keys = list(kwargs.keys())
+
+        self.label_ModeParameter1.setText(keys[0])
+        self.label_ModeParameter1Value.setText(str(kwargs[keys[0]]))
+        self.doubleSpinBox_ModeParameter1.setValue(float(kwargs[keys[0]]))
+
+        self.label_ModeParameter2.setText(keys[1])
+        self.label_ModeParameter2Value.setText(str(kwargs[keys[1]]))
+        self.doubleSpinBox_ModeParameter2.setValue(float(kwargs[keys[1]]))
+
+        self.label_ModeParameter3.setText(keys[2])
+        self.label_ModeParameter3Value.setText(str(kwargs[keys[2]]))
+        self.doubleSpinBox_ModeParameter3.setValue(float(kwargs[keys[2]]))
+        return None
+
+    def updateKwargs(self):
+        kwargs = getattr(self.scope,"_currentMode").kwargs
+        keys = list(kwargs.keys())
+
+        kwargs[keys[0]] = self.doubleSpinBox_ModeParameter1.value()
+        kwargs[keys[1]] = self.doubleSpinBox_ModeParameter2.value()
+        kwargs[keys[2]] = self.doubleSpinBox_ModeParameter3.value()
+
+        setattr(self.scope._currentMode,"kwargs",kwargs)
+        setattr(self.scope._currentMode,'output',self.scope._currentMode._initializeOutput())
+        return None
+
     def updateModes(self):
         domain = self.comboBox_CurrentDomain.currentText()
         modes = self.scope.getAvailableModes()
@@ -283,17 +313,23 @@ class GuzikOScopeWindow(Window):
                 if modes[key].modeDomain == "Frequency":
                     self.comboBox_CurrentMode.addItem(modes[key].modeName,key)
 
+        self.getKwargs()
         return None
 
     def setMode(self):
         self.acquisitionStop()
+        curModeStr = list(self.scope.getCurrentMode().keys())[0]
         modeStr = self.comboBox_CurrentMode.currentData()
         self.scope.setCurrentMode(modeStr)
+        if curModeStr == modeStr:
+            self.updateKwargs()
+            setattr(self.scope,'_buffer',self.scope._currentMode.output)
         self.scope.setCurrentPlot(self.scope.getCurrentMode()[modeStr].plotType)
         self.label_CurrentDomainValue.setText(list(self.scope.getCurrentMode().values())[0].modeDomain)
         self.label_CurrentModeValue.setText(list(self.scope.getCurrentMode().values())[0].modeName)
         self.updatePlotTypes()
         self.clearPlot()
+        self.getKwargs()
         return None
 
     def clearPlot(self):

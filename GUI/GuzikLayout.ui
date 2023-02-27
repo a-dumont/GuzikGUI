@@ -439,7 +439,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="doubleSpinBox">
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_ModeParameter1">
               <property name="minimum">
                <double>-100000000000.000000000000000</double>
               </property>
@@ -467,7 +467,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_ModeParameter2">
               <property name="minimum">
                <double>-100000000000.000000000000000</double>
               </property>
@@ -495,7 +495,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_ModeParameter3">
               <property name="minimum">
                <double>-100000000000.000000000000000</double>
               </property>

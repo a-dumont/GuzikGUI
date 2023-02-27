@@ -28,9 +28,9 @@ class TimeSeries(BlankMode):
     outFmt["label"] = None
 
     kwargs = {}
-    kwargs["Argument 1"] = 0
-    kwargs["Argument 2"] = 0
-    kwargs["Argument 3"] = 0
+    kwargs["Not Used 1"] = 0
+    kwargs["Not Used 2"] = 0
+    kwargs["Not Used 3"] = 0
 
     def __init__(self,guzik):
 
@@ -101,9 +101,9 @@ class OneDimHistogram(BlankMode):
     outFmt["label"] = None
 
     kwargs = {}
-    kwargs["Argument 1"] = 0
-    kwargs["Argument 2"] = 0
-    kwargs["Argument 3"] = 0
+    kwargs["Not Used 1"] = 0
+    kwargs["Not Used 2"] = 0
+    kwargs["Not Used 3"] = 0
 
     def __init__(self,guzik):
 

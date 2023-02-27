@@ -27,6 +27,8 @@ class dummy_guzik(object):
         self._config['sampling_period_ns'] = 0.03125
         self._config['n_S_ch'] = 1024
         self._config['gain_dB'] = [12.3,22.1]
+        self._config['conv_resolution'] = [1e-4,1e-4]
+        self._config['conv_offset'] = [128.0,128.0]
         return None
 
     def config(self,**kwargs):
@@ -52,6 +54,8 @@ class dummy_guzik(object):
                 self._config['Nch'] = len(kwargs['channels'])
                 channels = ["CH%i"%i for i in kwargs['channels']]
                 self._config['channels'] = ', '.join(channels)
+                self._config['conv_resolution'] = [1e-4 for i in range(self._config['Nch'])]
+                self._config['conv_offset'] = [128.0 for i in range(self._config['Nch'])]
             except:
                 pass
 
@@ -119,9 +123,9 @@ class BlankMode(object):
     outFmt["label"] = None
 
     kwargs = {}
-    kwargs["Argument 1"] = 0
-    kwargs["Argument 2"] = 0
-    kwargs["Argument 3"] = 0
+    kwargs["Not Used 1"] = 0
+    kwargs["Not Used 2"] = 0
+    kwargs["Not Used 3"] = 0
 
     def __init__(self, guzik):
         """

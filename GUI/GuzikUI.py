@@ -15,7 +15,7 @@ from .GuzikLayout import Ui_MainWindow
 class Window(QMainWindow, Ui_MainWindow):
 
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super(Window,self).__init__(parent)
         self.setupUi(self)
 
         self.fig, ax = plt.subplots()

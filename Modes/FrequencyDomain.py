@@ -4,7 +4,7 @@ Time Series measurement.
 import numpy as np
 from .Mode import BlankMode
 from SignalProcessing.fft import digitizer_rFFT
-from SignalProcessing.fft import digitizer_rFFT_cuda
+from SignalProcessing.correlations import digitizer_autocorrelation_cuda
 
 try:
     from pyHegel.commands import get
@@ -141,8 +141,8 @@ class VoltageSpectrumCUDA(BlankMode):
         assert len(ch) == len(self.output), "Number of channels and outputs do not match."
 
         for i in range(len(self.output)):
-            result = np.abs(digitizer_rFFT_cuda(data[i],int(self.kwargs['Block Size']),conv[i],int(offset[i])))
-            self.output[i]['yData'] = result.reshape(int(len(result)/size),size).mean(axis=0)
+            result = digitizer_autocorrelation_cuda(data[i],int(self.kwargs['Block Size']),conv[i],int(offset[i]))
+            self.output[i]['yData'] = np.sqrt(result)
 
         return [out.copy() for out in self.output]
 
@@ -300,8 +300,8 @@ class PowerSpectrumCUDA(BlankMode):
         assert len(ch) == len(self.output), "Number of channels and outputs do not match."
 
         for i in range(len(self.output)):
-            result = np.abs(digitizer_rFFT_cuda(data[i],int(self.kwargs['Block Size']),conv[i],int(offset[i])))**2
-            self.output[i]['yData'] = result.reshape(int(len(result)/size),size).mean(axis=0)
+            result = digitizer_autocorrelation_cuda(data[i],int(self.kwargs['Block Size']),conv[i],int(offset[i]))
+            self.output[i]['yData'] = result
 
         return [out.copy() for out in self.output]
 

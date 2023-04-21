@@ -512,11 +512,34 @@ class GuzikOScopeWindow(Window):
         return None
 
     def exportData(self):
+        self.acquisitionStop()
         filename = None
         options = QFileDialog.Options()
-        fileName, _ = QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()", "","All Files (*)", options=options)
-        if fileName:
-            print(fileName)
+        filename, _ = QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()", "","All Files (*)", options=options)
+        if not filename:
+            return None
+        print(filename)
+        output = {}
+        output['config'] = [self.scope.guzik.config()]
+        if self.checkBox_exportLast.isChecked() == True:
+            output['buffer'] = getattr(self.scope,'_buffer').copy()
+        if self.checkBox_exportLast.isChecked() == True:
+            if getattr(self.scope,'_memory1') != None:
+                output['memory1'] = getattr(self.scope,'_memory1').copy()
+        if self.checkBox_exportLast.isChecked() == True:
+            if getattr(self.scope,'_memory2') != None:
+                output['memory2'] = getattr(self.scope,'_memory2').copy()
+        if self.checkBox_exportLast.isChecked() == True:
+            if getattr(self.scope,'_memory3') != None:
+                output['memory3'] = getattr(self.scope,'_memory3').copy()
+        if self.checkBox_exportLast.isChecked() == True:
+            if getattr(self.scope,'_memory4') != None:
+                output['memory4'] = getattr(self.scope,'_memory4').copy()
+        if self.comboBox_compression.currentIndex() == 0:
+            np.savez(filename,**output)
+        else:
+            np.savez_compressed(filename,**output)
+        self.label_ExportResult.setText('Saved file: %s'%filename)
         return None
 
 def launch():

@@ -1228,6 +1228,12 @@
               <property name="text">
                <string>Last measurment</string>
               </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+              <property name="tristate">
+               <bool>false</bool>
+              </property>
              </widget>
             </item>
             <item>
@@ -1277,7 +1283,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_31">
             <item>
-             <widget class="QComboBox" name="comboBox">
+             <widget class="QComboBox" name="comboBox_compression">
               <item>
                <property name="text">
                 <string>False</string>

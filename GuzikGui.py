@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import threading
 from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QFileDialog
 
 import Modes
 import Plots
@@ -39,6 +40,11 @@ class GuzikOScope(object):
 
         self._buffer = None
 
+        self._memory1 = None
+        self._memory2 = None
+        self._memory3 = None
+        self._memory4 = None
+
         self.setCurrentMode('TimeSeries')
         self.setCurrentPlot('OneDimPlot')
 
@@ -48,7 +54,24 @@ class GuzikOScope(object):
         currentMode = getattr(self,'_currentMode')
         currentPlot = getattr(self,'_currentPlot')
         setattr(self,'_buffer',currentMode())
-        currentPlot.updatePlot(getattr(self,'_buffer'))
+
+        buffer = getattr(self,'_buffer').copy()
+        memory1 = getattr(self,'_memory1')
+        memory2 = getattr(self,'_memory2')
+        memory3 = getattr(self,'_memory3')
+        memory4 = getattr(self,'_memory4')
+        currentPlot = getattr(self,'_currentPlot')
+
+        if memory1 != None:
+            buffer += memory1
+        if memory2 != None:
+            buffer += memory2
+        if memory3 != None:
+            buffer += memory3
+        if memory4 != None:
+            buffer += memory4
+
+        currentPlot.updatePlot(buffer)
         return None
 
     def getNewData(self):
@@ -60,8 +83,23 @@ class GuzikOScope(object):
         return getattr(self,'_buffer')
 
     def updatePlot(self, rescale=True):
+        buffer = getattr(self,'_buffer').copy()
+        memory1 = getattr(self,'_memory1')
+        memory2 = getattr(self,'_memory2')
+        memory3 = getattr(self,'_memory3')
+        memory4 = getattr(self,'_memory4')
         currentPlot = getattr(self,'_currentPlot')
-        currentPlot.updatePlot(getattr(self,'_buffer'),rescale)
+
+        if memory1 != None:
+            buffer += memory1
+        if memory2 != None:
+            buffer += memory2
+        if memory3 != None:
+            buffer += memory3
+        if memory4 != None:
+            buffer += memory4
+
+        currentPlot.updatePlot(buffer,rescale)
         return None
 
     def _setAvailableModes(self):
@@ -120,9 +158,12 @@ class GuzikOScopeWindow(Window):
         self.setupAcquisitionTab()
         self.setupModeTab()
         self.setupPlotTab()
+        self.setupExportTab()
 
         self.continous = False
         self.averaging = False
+
+        self._fileDialog = QFileDialog()
 
         return None
 
@@ -135,6 +176,14 @@ class GuzikOScopeWindow(Window):
         self.pushButtonSingle.clicked.connect(self.acquisitionSingle)
         self.pushButtonContinous.clicked.connect(self.acquisitionContinuous)
         self.pushButtonStop.clicked.connect(self.acquisitionStop)
+        self.pushButton_Memorize1.clicked.connect(self.memorize1)
+        self.pushButton_Memorize2.clicked.connect(self.memorize2)
+        self.pushButton_Memorize3.clicked.connect(self.memorize3)
+        self.pushButton_Memorize4.clicked.connect(self.memorize4)
+        self.pushButton_ClearMemory1.clicked.connect(self.clearMemory1)
+        self.pushButton_ClearMemory2.clicked.connect(self.clearMemory2)
+        self.pushButton_ClearMemory3.clicked.connect(self.clearMemory3)
+        self.pushButton_ClearMemory4.clicked.connect(self.clearMemory4)
         return None
 
     def setupModeTab(self):
@@ -154,6 +203,10 @@ class GuzikOScopeWindow(Window):
         self.label_CurrentPlotTypeValue.setText(self.scope._currentPlot.plotName)
         return None
 
+    def setupExportTab(self):
+        self.pushButton_export.clicked.connect(self.exportData)
+        return None
+
     def loadGuzik(self):
         try:
             from pyHegel.instruments import guzik_adp7104
@@ -168,23 +221,33 @@ class GuzikOScopeWindow(Window):
         self.acquisitionStop()
         channels = []
         gain_dB = []
+        offset = []
         if self.checkBox_Channel1.isChecked() == True:
             channels.append(1)
             gain_dB.append(self.doubleSpinBox_Gain1.value())
+            offset.append(self.doubleSpinBox_offset1.value())
         if self.checkBox_Channel2.isChecked() == True:
             channels.append(2)
             gain_dB.append(self.doubleSpinBox_Gain2.value())
+            offset.append(self.doubleSpinBox_offset2.value())
         if self.checkBox_Channel3.isChecked() == True:
             channels.append(3)
             gain_dB.append(self.doubleSpinBox_Gain3.value())
+            offset.append(self.doubleSpinBox_offset3.value())
         if self.checkBox_Channel4.isChecked() == True:
             channels.append(4)
             gain_dB.append(self.doubleSpinBox_Gain4.value())
+            offset.append(self.doubleSpinBox_offset4.value())
 
         n_S_ch = self.spinBox_Samples.value()
         bits_16 = bool(self.comboBox_16bits.currentIndex())
+        equalizer_en = bool(self.comboBox_equalizer.currentIndex())
+        force_slower_sampling = bool(self.comboBox_forceSlowerSampling.currentIndex())
+        ext_ref = self.comboBox_externalReference.currentText()
 
-        self.scope.guzik.config(channels=channels,gain_dB=gain_dB,n_S_ch=n_S_ch,bits_16=bits_16)
+        self.scope.guzik.config(channels=channels,gain_dB=gain_dB,n_S_ch=n_S_ch,\
+        bits_16=bits_16,offset=offset,equalizer_en=equalizer_en,\
+        force_slower_sampling=force_slower_sampling,ext_ref=ext_ref)
         self.scope.setCurrentMode(list(self.scope.getCurrentMode().keys())[0])
         self.clearPlot()
         return None
@@ -204,16 +267,28 @@ class GuzikOScopeWindow(Window):
         gainUI[2] = self.doubleSpinBox_Gain3
         gainUI[3] = self.doubleSpinBox_Gain4
 
+        offsetUI = [None,None,None,None]
+        offsetUI[0] = self.doubleSpinBox_offset1
+        offsetUI[1] = self.doubleSpinBox_offset2
+        offsetUI[2] = self.doubleSpinBox_offset3
+        offsetUI[3] = self.doubleSpinBox_offset4
+
         channels = config['channels'].split(",")
         channels = [int(string[-1])-1 for string in channels]
+
         gain = config['gain_dB']
+        offset = config['offset']
 
         for i in range(len(channels)):
             channelsUI[channels[i]].setChecked(True)
             gainUI[channels[i]].setValue(gain[i])
+            offsetUI[channels[i]].setValue(offset[i])
 
         self.spinBox_Samples.setValue(config['n_S_ch'])
         self.comboBox_16bits.setCurrentIndex(int(config["bits_16"]))
+        self.comboBox_equalizer.setCurrentIndex(int(config["equalizer_en"]))
+        self.comboBox_forceSlowerSampling.setCurrentIndex(int(config["force_slower_sampling"]))
+        self.comboBox_externalReference.setCurrentText(config["ext_ref"])
 
         return None
 
@@ -324,12 +399,15 @@ class GuzikOScopeWindow(Window):
         if curModeStr == modeStr:
             self.updateKwargs()
             setattr(self.scope,'_buffer',self.scope._currentMode.output)
+        else:
+            self.clearAllMemory()
         self.scope.setCurrentPlot(self.scope.getCurrentMode()[modeStr].plotType)
         self.label_CurrentDomainValue.setText(list(self.scope.getCurrentMode().values())[0].modeDomain)
         self.label_CurrentModeValue.setText(list(self.scope.getCurrentMode().values())[0].modeName)
         self.updatePlotTypes()
         self.clearPlot()
         self.getKwargs()
+        self.label_CurrentPlotTypeValue.setText(self.scope._currentPlot.plotName)
         return None
 
     def clearPlot(self):
@@ -370,11 +448,83 @@ class GuzikOScopeWindow(Window):
         self.label_CurrentPlotTypeValue.setText(self.scope._currentPlot.plotName)
         return None
 
+    def memorize1(self):
+        buffer_temp = getattr(self.scope,'_buffer')
+        buffer = [i.copy() for i in buffer_temp]
+        for i in buffer:
+            i['label'] = 'Memory 1 - ' + i['label']
+        setattr(self.scope,'_memory1',buffer)
+        self.scope.updatePlot()
+        return None
+
+    def memorize2(self):
+        buffer_temp = getattr(self.scope,'_buffer')
+        buffer = [i.copy() for i in buffer_temp]
+        for i in buffer:
+            i['label'] = 'Memory 2 - ' + i['label']
+        setattr(self.scope,'_memory2',buffer)
+        self.scope.updatePlot()
+        return None
+
+    def memorize3(self):
+        buffer_temp = getattr(self.scope,'_buffer')
+        buffer = [i.copy() for i in buffer_temp]
+        for i in buffer:
+            i['label'] = 'Memory 3 - ' + i['label']
+        setattr(self.scope,'_memory3',buffer)
+        self.scope.updatePlot()
+        return None
+
+    def memorize4(self):
+        buffer_temp = getattr(self.scope,'_buffer')
+        buffer = [i.copy() for i in buffer_temp]
+        for i in buffer:
+            i['label'] = 'Memory 4 - ' + i['label']
+        setattr(self.scope,'_memory4',buffer)
+        self.scope.updatePlot()
+        return None
+
+    def clearMemory1(self):
+        setattr(self.scope,'_memory1',None)
+        self.scope.updatePlot()
+        return None
+
+    def clearMemory2(self):
+        setattr(self.scope,'_memory2',None)
+        self.scope.updatePlot()
+        return None
+
+    def clearMemory3(self):
+        setattr(self.scope,'_memory3',None)
+        self.scope.updatePlot()
+        return None
+
+    def clearMemory4(self):
+        setattr(self.scope,'_memory4',None)
+        self.scope.updatePlot()
+        return None
+
+    def clearAllMemory(self):
+        setattr(self.scope,'_memory1',None)
+        setattr(self.scope,'_memory2',None)
+        setattr(self.scope,'_memory3',None)
+        setattr(self.scope,'_memory4',None)
+        return None
+
+    def exportData(self):
+        filename = None
+        options = QFileDialog.Options()
+        fileName, _ = QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()", "","All Files (*)", options=options)
+        if fileName:
+            print(fileName)
+        return None
+
 def launch():
     app = QApplication(sys.argv)
     win = GuzikOScopeWindow()
     win.show()
     return app, win
+
 #if __name__ == "__main__":
 #    app = QApplication(sys.argv)
 #    win = GuzikOScopeWindow()

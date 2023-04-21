@@ -23,12 +23,16 @@ class dummy_guzik(object):
         self._config['Nch'] = 2
         self._config['channels'] = "CH1, CH3"
         self._config['bits_16'] = False
-        self._config['sampling_rate_GSs'] = 32
+        self._config['sampling_rate_GSs'] = 32.0
         self._config['sampling_period_ns'] = 0.03125
         self._config['n_S_ch'] = 1024
         self._config['gain_dB'] = [12.3,22.1]
         self._config['conv_resolution'] = [1e-4,1e-4]
         self._config['conv_offset'] = [128.0,128.0]
+        self._config['offset'] = [0.0,0.0]
+        self._config['equalizer_en'] = True
+        self._config['force_slower_sampling'] = False
+        self._config['ext_ref'] = 'default'
         return None
 
     def config(self,**kwargs):
@@ -51,6 +55,22 @@ class dummy_guzik(object):
             except:
                 pass
             try:
+                self._config['offset'] = kwargs['offset']
+            except:
+                pass
+            try:
+                self._config['equalizer_en'] = kwargs['equalizer_en']
+            except:
+                pass
+            try:
+                self._config['force_slower_sampling'] = kwargs['force_slower_sampling']
+            except:
+                pass
+            try:
+                self._config['ext_ref'] = kwargs['ext_ref']
+            except:
+                pass
+            try:
                 self._config['Nch'] = len(kwargs['channels'])
                 channels = ["CH%i"%i for i in kwargs['channels']]
                 self._config['channels'] = ', '.join(channels)
@@ -66,6 +86,8 @@ class dummy_guzik(object):
         out = np.zeros((self.config()['Nch'],self.config()['n_S_ch']),dtype=np.uint8)
         for i in range(out.shape[0]):
             out[i] = np.random.randint(0,256,self.config()['n_S_ch'],dtype=np.uint8)
+        if self.config()['Nch'] == 1:
+            out = out[0]
         return out
 
 class BlankMode(object):

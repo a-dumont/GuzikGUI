@@ -287,7 +287,7 @@ class GuzikOScopeWindow(Window):
         self.spinBox_Samples.setValue(config['n_S_ch'])
         self.comboBox_16bits.setCurrentIndex(int(config["bits_16"]))
         self.comboBox_equalizer.setCurrentIndex(int(config["equalizer_en"]))
-        self.comboBox_forceSlowerSampling.setCurrentIndex(int(config["force_slower_sampling"]))
+        #self.comboBox_forceSlowerSampling.setCurrentIndex(int(config["force_slower_sampling"]))
         self.comboBox_externalReference.setCurrentText(config["ext_ref"])
 
         return None

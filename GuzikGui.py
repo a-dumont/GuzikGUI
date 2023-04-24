@@ -55,7 +55,7 @@ class GuzikOScope(object):
         currentPlot = getattr(self,'_currentPlot')
         setattr(self,'_buffer',currentMode())
 
-        buffer = getattr(self,'_buffer').copy()
+        buffer = [i for i in getattr(self,'_buffer')]
         memory1 = getattr(self,'_memory1')
         memory2 = getattr(self,'_memory2')
         memory3 = getattr(self,'_memory3')
@@ -83,7 +83,7 @@ class GuzikOScope(object):
         return getattr(self,'_buffer')
 
     def updatePlot(self, rescale=True):
-        buffer = getattr(self,'_buffer').copy()
+        buffer = [i for i in getattr(self,'_buffer')]
         memory1 = getattr(self,'_memory1')
         memory2 = getattr(self,'_memory2')
         memory3 = getattr(self,'_memory3')

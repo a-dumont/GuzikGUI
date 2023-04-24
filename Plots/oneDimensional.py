@@ -61,7 +61,7 @@ class OneDimPlotAbs(BlankPlot):
             self.initialOutput(_input)
 
         for i in range(N):
-            axes[0].lines[i].set_data(_input[i]['xData'],_input[i]['yData'])
+            axes[0].lines[i].set_data(_input[i]['xData'],np.abs(_input[i]['yData']))
 
         if rescale == True:
             for ax in axes:

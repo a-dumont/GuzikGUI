@@ -167,10 +167,25 @@ class TwoDimHistogram(BlankMode):
 
     modeDomain = "Time"
     modeName = "2D Histogram"
-    modeCategory = "Time domain"
-    modeDescription = "A mode for 2D time domain histograms."
-    plotType = "TwoDimPlot"
+    plotType = "TwoDimPlotCMap"
     modeDimension = "2D"
+
+    outFmt = {}
+    outFmt['xData'] = None
+    outFmt["yData"] = None
+    outFmt["zData"] = None
+    outFmt["xLabel"] = "Bin"
+    outFmt["xUnit"] = ""
+    outFmt["yLabel"] = "Bin"
+    outFmt["yUnit"] = ""
+    outFmt["zLabel"] = "Count"
+    outFmt["zUnit"] = ""
+    outFmt["label"] = None
+
+    kwargs = {}
+    kwargs["Not Used 1"] = 0
+    kwargs["Not Used 2"] = 0
+    kwargs["Not Used 3"] = 0
 
     def __init__(self,guzik):
 
@@ -191,67 +206,44 @@ class TwoDimHistogram(BlankMode):
 
     def __call__(self):
 
+        Nch = self.guzik.config()['Nch']
+        assert Nch == 2, 'Must have two channels'
+
         data = get(self.guzik)
-        output = [None]
+
+        res = digitizer_histogram2D(data[0],data[1],self.nbits)[0:1<<self.nbits_out,0:1<<self.nbits_out]
+        self.output[0]["zData"] = res
+
+        return [out.copy() for out in self.output]
+
+    def _initializeOutput(self):
+        Nch = self.guzik.config()['Nch']
+        assert Nch == 2, 'Must have two channels'
+        n_S_ch = self.guzik.config()['n_S_ch']
         ch = self.guzik.config()["channels"]
         ch = ch.split(",")
 
-        xData = self.getXData()
-        yData = self.getYData()
-
-        assert len(ch) == 2, "Number of channels and outputs do not match."
-
-        out = {}
-        out['xData'] = xData
-        out['yData'] = yData
-        out["zData"] = digitizer_histogram2D(data[0],data[1],self.nbits)[0:1<<self.nbits_out,0:1<<self.nbits_out]
-        out["xLabel"] = "Channel %s"%ch[0][-1]
-        out["xUnit"] = "[Bin]"
-        out["yLabel"] = "Channel %s"%ch[1][-1]
-        out["yUnit"] = "[Bin]"
-        out['zLabel'] = 'Count'
-        out['zUnit'] = ''
-        out["label"] = ""
-        output[0] = out
-
-        return output
-
-    def getXData(self):
-        x = np.linspace(0,(1<<self.nbits_out)-1,1<<self.nbits_out)
-        return x
-
-    def getYData(self):
-        y = np.linspace(0,(1<<self.nbits_out)-1,1<<self.nbits_out)
-        return y
-
-    def getDummyOutput(self):
-
-        Nch = 2
-        n_S_ch = self.guzik.config()['n_S_ch']
+        if self.guzik.config()["bits_16"] == True:
+            self.nbits = 16
+            self.nbits_out = 10
+        else:
+            self.nbits = 8
+            self.nbits_out = 8
 
         if self.guzik.config()['bits_16'] == True:
             data = np.zeros((Nch,n_S_ch),dtype=np.int16)
         else:
             data = np.zeros((Nch,n_S_ch),dtype=np.uint8)
 
-        output = [None]
+        output = [self.outFmt.copy()]
 
-        ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
-        xData = self.getXData()
+        xData = np.linspace(0,(1<<self.nbits_out)-1,1<<self.nbits_out)
+        yData = np.linspace(0,(1<<self.nbits_out)-1,1<<self.nbits_out)
 
-        out = {}
-        out['xData'] = xData
-        out['yData'] = yData
-        out["zData"] = digitizer_histogram2D(data[0],data[1],self.nbits)[0:1<<self.nbits_out,0:1<<self.nbits_out]
-        out["xLabel"] = "Channel %s"%ch[0][-1]
-        out["xUnit"] = "[Bin]"
-        out["yLabel"] = "Channel %s"%ch[1][-1]
-        out["yUnit"] = "[Bin]"
-        out['zLabel'] = 'Count'
-        out['zUnit'] = ''
-        out["label"] = ""
-        output[0] = out
+        output[0]['xData'] = xData
+        output[0]['yData'] = yData
+        output[0]["zData"] = digitizer_histogram2D(data[0],data[1],self.nbits)[0:1<<self.nbits_out,0:1<<self.nbits_out]
+        output[0]["label"] = "Channels %s-%s"%(ch[0][-1],ch[1][-1])
 
         return output
 

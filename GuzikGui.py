@@ -13,6 +13,7 @@ import Plots
 
 try:
     del Plots.BlankPlot
+    del Plots.BlankPlot2D
     del Modes.BlankMode
 except:
     pass
@@ -25,7 +26,8 @@ class GuzikOScope(object):
 
         if fig == None and axes == None:
             self.fig, ax = plt.subplots()
-            self.axes = [ax]
+            self.axes = fig.axes
+            #self.axes = [ax]
         else:
             self.fig = fig
             self.axes = axes
@@ -82,7 +84,7 @@ class GuzikOScope(object):
     def getData(self):
         return getattr(self,'_buffer')
 
-    def updatePlot(self, rescale=True):
+    def updatePlot(self, rescale=True,reset=False):
         buffer = [i for i in getattr(self,'_buffer')]
         memory1 = getattr(self,'_memory1')
         memory2 = getattr(self,'_memory2')
@@ -99,7 +101,7 @@ class GuzikOScope(object):
         if memory4 != None:
             buffer += memory4
 
-        currentPlot.updatePlot(buffer,rescale)
+        currentPlot.updatePlot(buffer,rescale,reset)
         return None
 
     def _setAvailableModes(self):
@@ -454,7 +456,7 @@ class GuzikOScopeWindow(Window):
         for i in buffer:
             i['label'] = 'Memory 1 - ' + i['label']
         setattr(self.scope,'_memory1',buffer)
-        self.scope.updatePlot()
+        self.scope.updatePlot(reset=True)
         return None
 
     def memorize2(self):
@@ -463,7 +465,7 @@ class GuzikOScopeWindow(Window):
         for i in buffer:
             i['label'] = 'Memory 2 - ' + i['label']
         setattr(self.scope,'_memory2',buffer)
-        self.scope.updatePlot()
+        self.scope.updatePlot(reset=True)
         return None
 
     def memorize3(self):
@@ -472,7 +474,7 @@ class GuzikOScopeWindow(Window):
         for i in buffer:
             i['label'] = 'Memory 3 - ' + i['label']
         setattr(self.scope,'_memory3',buffer)
-        self.scope.updatePlot()
+        self.scope.updatePlot(reset=True)
         return None
 
     def memorize4(self):
@@ -481,27 +483,27 @@ class GuzikOScopeWindow(Window):
         for i in buffer:
             i['label'] = 'Memory 4 - ' + i['label']
         setattr(self.scope,'_memory4',buffer)
-        self.scope.updatePlot()
+        self.scope.updatePlot(reset=True)
         return None
 
     def clearMemory1(self):
         setattr(self.scope,'_memory1',None)
-        self.scope.updatePlot()
+        self.scope.updatePlot(reset=True)
         return None
 
     def clearMemory2(self):
         setattr(self.scope,'_memory2',None)
-        self.scope.updatePlot()
+        self.scope.updatePlot(reset=True)
         return None
 
     def clearMemory3(self):
         setattr(self.scope,'_memory3',None)
-        self.scope.updatePlot()
+        self.scope.updatePlot(reset=True)
         return None
 
     def clearMemory4(self):
         setattr(self.scope,'_memory4',None)
-        self.scope.updatePlot()
+        self.scope.updatePlot(reset=True)
         return None
 
     def clearAllMemory(self):

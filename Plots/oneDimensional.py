@@ -16,7 +16,7 @@ class OneDimPlot(BlankPlot):
 
         return None
 
-    def updatePlot(self, _input, rescale=True):
+    def updatePlot(self, _input, rescale=True, reset=False):
         fig = self.fig
         axes = self.axes
 
@@ -26,6 +26,7 @@ class OneDimPlot(BlankPlot):
         N = len(_input)
         if len(axes[0].lines) != N:
             self.initialOutput(_input)
+            return None
 
         for i in range(N):
             axes[0].lines[i].set_data(_input[i]['xData'],_input[i]['yData'])
@@ -49,7 +50,7 @@ class OneDimPlotAbs(BlankPlot):
 
         return None
 
-    def updatePlot(self, _input, rescale=True):
+    def updatePlot(self, _input, rescale=True, reset=False):
         fig = self.fig
         axes = self.axes
 

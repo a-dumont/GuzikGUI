@@ -237,8 +237,8 @@ class TwoDimHistogram(BlankMode):
 
         output = [self.outFmt.copy()]
 
-        xData = np.linspace(0,(1<<self.nbits_out)-1,1<<self.nbits_out)
-        yData = np.linspace(0,(1<<self.nbits_out)-1,1<<self.nbits_out)
+        xData = np.linspace(0,(1<<self.nbits_out),(1<<self.nbits_out)+1)
+        yData = np.linspace(0,(1<<self.nbits_out),(1<<self.nbits_out)+1)
 
         output[0]['xData'] = xData
         output[0]['yData'] = yData

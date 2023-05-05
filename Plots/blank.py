@@ -244,7 +244,7 @@ class BlankPlot2D(object):
         axes = self.axes
 
         for i in range(N):
-            axes[i].collections[0].set_array(_input[i]['zData'].T)
+            axes[i].collections[0].set_array((_input[i]['zData'].T).flatten())
             if rescale == True:
                 axes[i].collections[0].autoscale()
 

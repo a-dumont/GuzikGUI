@@ -54,7 +54,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="tabBarAutoHide">
        <bool>false</bool>
@@ -789,7 +789,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButtonContinous">
+             <widget class="QPushButton" name="pushButtonContinuous">
               <property name="text">
                <string>Continuous</string>
               </property>

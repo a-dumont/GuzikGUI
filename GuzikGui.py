@@ -162,7 +162,7 @@ class GuzikOScopeWindow(Window):
         self.setupPlotTab()
         self.setupExportTab()
 
-        self.continous = False
+        self.continuous = False
         self.averaging = False
 
         self._fileDialog = QFileDialog()
@@ -176,7 +176,7 @@ class GuzikOScopeWindow(Window):
 
     def setupAcquisitionTab(self):
         self.pushButtonSingle.clicked.connect(self.acquisitionSingle)
-        self.pushButtonContinous.clicked.connect(self.acquisitionContinuous)
+        self.pushButtonContinuous.clicked.connect(self.acquisitionContinuousFirst)
         self.pushButtonStop.clicked.connect(self.acquisitionStop)
         self.pushButton_Memorize1.clicked.connect(self.memorize1)
         self.pushButton_Memorize2.clicked.connect(self.memorize2)
@@ -296,7 +296,6 @@ class GuzikOScopeWindow(Window):
 
     def acquisitionSingle(self):
         self.acquisitionStop()
-        self.scope()
         if self.comboBox_Averaging.currentIndex() != 0:
             n = 1.0
             self.averaging = True
@@ -312,20 +311,23 @@ class GuzikOScopeWindow(Window):
                 self.scope.updatePlot(rescale=False)
                 n += 1.0
             self.averaging = False
+        else:
+            self.scope()
         return None
 
     def acquisitionContinuous(self):
-        self.acquisitionStop()
-        self.continous = True
-        if self.comboBox_Averaging.currentIndex() == 0:
-            while self.continous == True:
+        if self.continuous == False:
+            return None
+
+        elif self.comboBox_Averaging.currentIndex() == 0:
+            while self.continuous == True:
                 self.scope()
         else:
             n = 1.0
             self.averaging = True
             self.scope()
             _buffer = getattr(self.scope,'_buffer')
-            while self.averaging == True:
+            while self.averaging == True and self.continuous == True and n < self.spinBox_Averaging.value():
                 _buffer2 = self.scope.getNewData()
                 for i in range(len(_buffer)):
                     for key in _buffer[i].keys():
@@ -335,10 +337,17 @@ class GuzikOScopeWindow(Window):
                 self.scope.updatePlot(rescale=False)
                 n += 1.0
             self.averaging = False
+            self.acquisitionContinuous()
+        return None
+
+    def acquisitionContinuousFirst(self):
+        self.acquisitionStop()
+        self.continuous = True
+        self.acquisitionContinuous()
         return None
 
     def acquisitionStop(self):
-        self.continous = False
+        self.continuous = False
         self.averaging = False
         return None
 

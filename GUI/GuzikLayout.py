@@ -360,9 +360,9 @@ class Ui_MainWindow(object):
         self.pushButtonSingle.setFlat(False)
         self.pushButtonSingle.setObjectName("pushButtonSingle")
         self.horizontalLayout_25.addWidget(self.pushButtonSingle)
-        self.pushButtonContinous = QtWidgets.QPushButton(self.tabAcquisition)
-        self.pushButtonContinous.setObjectName("pushButtonContinous")
-        self.horizontalLayout_25.addWidget(self.pushButtonContinous)
+        self.pushButtonContinuous = QtWidgets.QPushButton(self.tabAcquisition)
+        self.pushButtonContinuous.setObjectName("pushButtonContinuous")
+        self.horizontalLayout_25.addWidget(self.pushButtonContinuous)
         self.verticalLayout_16.addLayout(self.horizontalLayout_25)
         self.pushButtonStop = QtWidgets.QPushButton(self.tabAcquisition)
         self.pushButtonStop.setObjectName("pushButtonStop")
@@ -639,7 +639,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_export.setCurrentIndex(0)
+        self.tabWidget_export.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -676,7 +676,7 @@ class Ui_MainWindow(object):
         self.comboBox_Averaging.setItemText(1, _translate("MainWindow", "True"))
         self.label_acquisition.setText(_translate("MainWindow", "Acquisition"))
         self.pushButtonSingle.setText(_translate("MainWindow", "Single"))
-        self.pushButtonContinous.setText(_translate("MainWindow", "Continuous"))
+        self.pushButtonContinuous.setText(_translate("MainWindow", "Continuous"))
         self.pushButtonStop.setText(_translate("MainWindow", "Stop"))
         self.label_memory1.setText(_translate("MainWindow", "Memory 1"))
         self.pushButton_Memorize1.setText(_translate("MainWindow", "Save"))

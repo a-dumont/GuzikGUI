@@ -251,7 +251,7 @@ class GuzikOScopeWindow(Window):
         bits_16=bits_16,offset=offset,equalizer_en=equalizer_en,\
         force_slower_sampling=force_slower_sampling,ext_ref=ext_ref)
         self.scope.setCurrentMode(list(self.scope.getCurrentMode().keys())[0])
-        self.clearPlot()
+        #self.clearPlot()
         return None
 
     def readConfigGuzik(self):

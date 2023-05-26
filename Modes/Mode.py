@@ -83,11 +83,18 @@ class dummy_guzik(object):
         """
         Works with the custom get() that is used when pyHegel is not found.
         """
-        out = np.zeros((self.config()['Nch'],self.config()['n_S_ch']),dtype=np.uint8)
-        for i in range(out.shape[0]):
-            out[i] = np.random.randint(0,256,self.config()['n_S_ch'],dtype=np.uint8)
-        if self.config()['Nch'] == 1:
-            out = out[0]
+        if self._config['bits_16'] == False:
+            out = np.zeros((self.config()['Nch'],self.config()['n_S_ch']),dtype=np.uint8)
+            for i in range(out.shape[0]):
+                out[i] = np.random.randint(0,256,self.config()['n_S_ch'],dtype=np.uint8)
+            if self.config()['Nch'] == 1:
+                out = out[0]
+        else:
+            out = np.zeros((self.config()['Nch'],self.config()['n_S_ch']),dtype=np.int16)
+            for i in range(out.shape[0]):
+                out[i] = np.random.randint(0,1024,self.config()['n_S_ch'],dtype=np.int16)
+            if self.config()['Nch'] == 1:
+                out = out[0]
         return out
 
 class BlankMode(object):

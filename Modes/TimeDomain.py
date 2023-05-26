@@ -5,6 +5,7 @@ import numpy as np
 from .Mode import BlankMode
 from SignalProcessing.histograms import digitizer_histogram
 from SignalProcessing.histograms import digitizer_histogram2D
+from SignalProcessing.histograms import digitizer_histogram2D_10bits
 try:
     from pyHegel.commands import get
 except:
@@ -211,7 +212,10 @@ class TwoDimHistogram(BlankMode):
 
         data = get(self.guzik)
 
-        res = digitizer_histogram2D(data[0],data[1],self.nbits)[0:1<<self.nbits_out,0:1<<self.nbits_out]
+        if self.nbits == 16:
+            res = digitizer_histogram2D_10bits(data[0],data[1])
+        else:
+            res = digitizer_histogram2D(data[0],data[1],self.nbits)[0:1<<self.nbits_out,0:1<<self.nbits_out]
         self.output[0]["zData"] = res
 
         return [out.copy() for out in self.output]
@@ -242,7 +246,10 @@ class TwoDimHistogram(BlankMode):
 
         output[0]['xData'] = xData
         output[0]['yData'] = yData
-        output[0]["zData"] = digitizer_histogram2D(data[0],data[1],self.nbits)[0:1<<self.nbits_out,0:1<<self.nbits_out]
+        if self.nbits == 16:
+            output[0]["zData"] = digitizer_histogram2D_10bits(data[0],data[1])
+        else:
+            output[0]["zData"] = digitizer_histogram2D(data[0],data[1],self.nbits)[0:1<<self.nbits_out,0:1<<self.nbits_out]
         output[0]["label"] = "Channels %s-%s"%(ch[0][-1],ch[1][-1])
 
         return output

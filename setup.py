@@ -17,7 +17,7 @@ setuptools.setup(
     ],
     py_modules=["GuzikGUI"],
     install_requires=['numpy','matplotlib','SignalProcessing'],
-    packages=setuptools.find_packages(),
+    #packages=setuptools.find_packages(),
     include_package_data=True,
     zip_safe=False
 )

@@ -1,4 +1,4 @@
-from .GuzikGUI import launch
+from .GuzikGUI import launch, GuzikOScope, GuzikOScopeWindow
 del GuzikGUI
 
 if __name__ == '__main__':

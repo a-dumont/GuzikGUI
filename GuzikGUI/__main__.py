@@ -1,4 +1,6 @@
 from .GuzikGUI import launch
 
-if __name__ == '__main__':
-    app, win = launch()
+app = QApplication(sys.argv)
+win = GuzikOScopeWindow()
+win.show()
+sys.exit(app.exec())

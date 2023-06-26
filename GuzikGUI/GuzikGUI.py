@@ -8,8 +8,8 @@ import threading
 from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox
 from PyQt5.QtWidgets import QFileDialog
 
-import GuzikGUI.Modes
-import GuzikGUI.Plots
+import GuzikGUI.Modes as Modes
+import GuzikGUI.Plots as Plots
 
 try:
     del Plots.BlankPlot

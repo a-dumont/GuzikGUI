@@ -1,0 +1,3 @@
+recursive-include Modes/ *.py
+recursive-include GUI/ *.py
+recursive-include Plots/ *.py

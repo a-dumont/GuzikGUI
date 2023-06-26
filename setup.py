@@ -15,7 +15,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    #py_modules=["GuzikGUI"],
+    py_modules=["GuzikGUI"],
     install_requires=['numpy','matplotlib','SignalProcessing'],
     packages=setuptools.find_packages(),
     include_package_data=True,

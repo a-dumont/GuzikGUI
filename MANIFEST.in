@@ -1,3 +1,3 @@
-recursive-include Modes/ *.py
-recursive-include GUI/ *.py
-recursive-include Plots/ *.py
+graft Modes
+graft GUI
+graft Plots

@@ -8,8 +8,8 @@ import threading
 from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox
 from PyQt5.QtWidgets import QFileDialog
 
-import Modes
-import Plots
+import GuzikGUI.Modes as Modes
+import GuzikGUI.Plots as Plots
 
 try:
     del Plots.BlankPlot
@@ -18,7 +18,7 @@ try:
 except:
     pass
 
-from GUI import Window
+from GuzikGUI.GUI import Window
 
 class GuzikOScope(object):
 

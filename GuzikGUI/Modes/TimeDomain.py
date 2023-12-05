@@ -53,7 +53,7 @@ class TimeSeries(BlankMode):
             data = np.array([data])
 
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
 
         assert len(ch) == len(self.output), "Number of channels and outputs do not match."
 
@@ -66,7 +66,7 @@ class TimeSeries(BlankMode):
         Nch = self.guzik.config()['Nch']
         n_S_ch = self.guzik.config()['n_S_ch']
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
         dt = self.guzik.config()['sampling_period_ns']*1e-9
 
         if self.guzik.config()['bits_16'] == True:
@@ -81,7 +81,7 @@ class TimeSeries(BlankMode):
         for i in range(len(output)):
             output[i]['xData'] = xData
             output[i]["yData"] = data[i]
-            output[i]["label"] = "Channel %s"%ch[i][-1]
+            output[i]["label"] = "Channel %s"%str(ch[i])[-2]
 
         return output
 
@@ -126,7 +126,7 @@ class OneDimHistogram(BlankMode):
             data = np.array([data])
 
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
 
         assert len(ch) == len(self.output), "Number of channels and outputs do not match."
 
@@ -139,7 +139,7 @@ class OneDimHistogram(BlankMode):
         Nch = self.guzik.config()['Nch']
         n_S_ch = self.guzik.config()['n_S_ch']
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
 
         if self.guzik.config()["bits_16"] == True:
             self.nbits = 16
@@ -160,7 +160,7 @@ class OneDimHistogram(BlankMode):
         for i in range(len(output)):
             output[i]['xData'] = xData
             output[i]["yData"] = digitizer_histogram(data[i],self.nbits)[0:1<<self.nbits_out]
-            output[i]["label"] = "Channel %s"%ch[i][-1]
+            output[i]["label"] = "Channel %s"%str(ch[i])[-2]
 
         return output
 
@@ -225,7 +225,7 @@ class TwoDimHistogram(BlankMode):
         assert Nch == 2, 'Must have two channels'
         n_S_ch = self.guzik.config()['n_S_ch']
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
 
         if self.guzik.config()["bits_16"] == True:
             self.nbits = 16
@@ -250,7 +250,7 @@ class TwoDimHistogram(BlankMode):
             output[0]["zData"] = digitizer_histogram2D_10bits(data[0],data[1])
         else:
             output[0]["zData"] = digitizer_histogram2D(data[0],data[1],self.nbits)[0:1<<self.nbits_out,0:1<<self.nbits_out]
-        output[0]["label"] = "Channels %s-%s"%(ch[0][-1],ch[1][-1])
+        output[0]["label"] = "Channels %s-%s"%(str(ch[0])[-2],str(ch[1])[-2])
 
         return output
 

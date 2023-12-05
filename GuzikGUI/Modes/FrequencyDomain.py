@@ -54,7 +54,7 @@ class VoltageSpectrum(BlankMode):
             data = np.array([data])
 
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
 
         conv = self.guzik.config()['conv_resolution']
         offset = self.guzik.config()['conv_offset']
@@ -72,7 +72,7 @@ class VoltageSpectrum(BlankMode):
         Nch = self.guzik.config()['Nch']
         n_S_ch = self.guzik.config()['n_S_ch']
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
         dt = self.guzik.config()['sampling_period_ns']*1e-9
         self.kwargs['Block Size'] = min(self.kwargs['Block Size'],n_S_ch)
 
@@ -88,7 +88,7 @@ class VoltageSpectrum(BlankMode):
         for i in range(len(output)):
             output[i]['xData'] = xData
             output[i]["yData"] = data[i]
-            output[i]["label"] = "Channel %s"%ch[i][-1]
+            output[i]["label"] = "Channel %s"%str(ch[i])[-2]
 
         return output
 
@@ -133,7 +133,7 @@ class VoltageSpectrumCUDA(BlankMode):
             data = np.array([data])
 
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
 
         conv = self.guzik.config()['conv_resolution']
         offset = self.guzik.config()['conv_offset']
@@ -151,7 +151,7 @@ class VoltageSpectrumCUDA(BlankMode):
         Nch = self.guzik.config()['Nch']
         n_S_ch = self.guzik.config()['n_S_ch']
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
         dt = self.guzik.config()['sampling_period_ns']*1e-9
         self.kwargs['Block Size'] = min(self.kwargs['Block Size'],n_S_ch)
 
@@ -167,7 +167,7 @@ class VoltageSpectrumCUDA(BlankMode):
         for i in range(len(output)):
             output[i]['xData'] = xData
             output[i]["yData"] = data[i]
-            output[i]["label"] = "Channel %s"%ch[i][-1]
+            output[i]["label"] = "Channel %s"%str(ch[i])[-2]
 
         return output
 
@@ -213,7 +213,7 @@ class PowerSpectrum(BlankMode):
             data = np.array([data])
 
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
 
         conv = self.guzik.config()['conv_resolution']
         offset = self.guzik.config()['conv_offset']
@@ -231,7 +231,7 @@ class PowerSpectrum(BlankMode):
         Nch = self.guzik.config()['Nch']
         n_S_ch = self.guzik.config()['n_S_ch']
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
         dt = self.guzik.config()['sampling_period_ns']*1e-9
         self.kwargs['Block Size'] = min(self.kwargs['Block Size'],n_S_ch)
 
@@ -247,7 +247,7 @@ class PowerSpectrum(BlankMode):
         for i in range(len(output)):
             output[i]['xData'] = xData
             output[i]["yData"] = data[i]
-            output[i]["label"] = "Channel %s"%ch[i][-1]
+            output[i]["label"] = "Channel %s"%str(ch[i])[-2]
 
         return output
 
@@ -292,7 +292,7 @@ class PowerSpectrumCUDA(BlankMode):
             data = np.array([data])
 
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
 
         conv = self.guzik.config()['conv_resolution']
         offset = self.guzik.config()['conv_offset']
@@ -310,7 +310,7 @@ class PowerSpectrumCUDA(BlankMode):
         Nch = self.guzik.config()['Nch']
         n_S_ch = self.guzik.config()['n_S_ch']
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
         dt = self.guzik.config()['sampling_period_ns']*1e-9
         self.kwargs['Block Size'] = min(self.kwargs['Block Size'],n_S_ch)
 
@@ -326,7 +326,7 @@ class PowerSpectrumCUDA(BlankMode):
         for i in range(len(output)):
             output[i]['xData'] = xData
             output[i]["yData"] = data[i]
-            output[i]["label"] = "Channel %s"%ch[i][-1]
+            output[i]["label"] = "Channel %s"%str(ch[i])[-2]
 
         return output
 
@@ -370,7 +370,7 @@ class CrossPowerSpectrumCUDA(BlankMode):
         assert self.guzik.config()['Nch'] == 2, "Must have exactly two channels"
 
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
 
         conv = self.guzik.config()['conv_resolution']
         conv = np.sqrt(np.abs(conv[0]*conv[1]))
@@ -387,7 +387,7 @@ class CrossPowerSpectrumCUDA(BlankMode):
         assert Nch == 2, "Must have exactly two channels"
         n_S_ch = self.guzik.config()['n_S_ch']
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
         dt = self.guzik.config()['sampling_period_ns']*1e-9
         self.kwargs['Block Size'] = min(self.kwargs['Block Size'],n_S_ch)
 
@@ -402,7 +402,7 @@ class CrossPowerSpectrumCUDA(BlankMode):
 
         output[0]['xData'] = xData
         output[0]["yData"] = data[0]
-        output[0]["label"] = "Channels %s and %s"%(ch[0][-1],ch[1][-1])
+        output[0]["label"] = "Channels %s and %s"%(str(ch[0])[-2],str(ch[1])[-2])
 
         return output
 

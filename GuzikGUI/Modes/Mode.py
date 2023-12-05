@@ -186,7 +186,7 @@ class BlankMode(object):
             data = np.array([data])
 
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
 
         assert len(ch) == len(self.output), "Number of channels and outputs do not match."
 
@@ -203,7 +203,7 @@ class BlankMode(object):
         Nch = self.guzik.config()['Nch']
         n_S_ch = self.guzik.config()['n_S_ch']
         ch = self.guzik.config()["channels"]
-        ch = ch.split(",")
+        ch = ch.split(b",")
         dt = self.guzik.config()['sampling_period_ns']*1e-9
 
         if self.guzik.config()['bits_16'] == True:
@@ -218,6 +218,6 @@ class BlankMode(object):
         for i in range(len(output)):
             output[i]['xData'] = xData
             output[i]["yData"] = data[i]
-            output[i]["label"] = "Channel %s"%ch[i][-1]
+            output[i]["label"] = "Channel %s"%str(ch[i])[-2]
 
         return output

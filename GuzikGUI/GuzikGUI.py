@@ -275,8 +275,8 @@ class GuzikOScopeWindow(Window):
         offsetUI[2] = self.doubleSpinBox_offset3
         offsetUI[3] = self.doubleSpinBox_offset4
 
-        channels = config['channels'].split(",")
-        channels = [int(string[-1])-1 for string in channels]
+        channels = config['channels'].split(b",")
+        channels = [int(str(string)[-2])-1 for string in channels]
 
         gain = config['gain_dB']
         offset = config['offset']

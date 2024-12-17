@@ -3,7 +3,7 @@ Time Series measurement.
 """
 import numpy as np
 from .Mode import BlankMode
-from SignalProcessing.fft import digitizer_rFFT
+from SignalProcessing.fft import digitizer_rfft
 from SignalProcessing.correlations import digitizer_autocorrelation_cuda
 from SignalProcessing.correlations import digitizer_crosscorrelation_cuda
 

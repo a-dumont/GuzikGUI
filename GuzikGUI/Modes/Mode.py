@@ -21,7 +21,7 @@ class dummy_guzik(object):
         """
         self._config = dict()
         self._config['Nch'] = 2
-        self._config['channels'] = "CH1, CH3"
+        self._config['channels'] = b"CH1, CH3"
         self._config['bits_16'] = False
         self._config['sampling_rate_GSs'] = 32.0
         self._config['sampling_period_ns'] = 0.03125
@@ -73,7 +73,7 @@ class dummy_guzik(object):
             try:
                 self._config['Nch'] = len(kwargs['channels'])
                 channels = ["CH%i"%i for i in kwargs['channels']]
-                self._config['channels'] = ', '.join(channels)
+                self._config['channels'] = b', '.join(channels)
                 self._config['conv_resolution'] = [1e-4 for i in range(self._config['Nch'])]
                 self._config['conv_offset'] = [128.0 for i in range(self._config['Nch'])]
             except:

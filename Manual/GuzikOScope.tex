@@ -49,9 +49,9 @@
     commentstyle=\color{codegreen},
     keywordstyle=\color{codegreen},
     emphstyle=\color{codegreen},
-    numberstyle=\small\color{codegray},
+    numberstyle=\tiny\color{codegray},
     stringstyle=\color{codepurple},
-    basicstyle=\ttfamily\large,
+    basicstyle=\ttfamily\normalsize,
     breakatwhitespace=false,         
     breaklines=true,                 
     captionpos=b,                    
@@ -62,6 +62,8 @@
     showstringspaces=false,
     showtabs=false,                  
     tabsize=2,
+	aboveskip=20pt,
+	belowskip=20pt,
 }
 
 \lstset{style=mystyle}
@@ -104,97 +106,119 @@ support et peuvent ne pas fonctionner.
 \mainmatter
 
 \clearpage
+\chapter*{Installation}
+\addcontentsline{toc}{chapter}{Installation}
+Ce chapitre explique la procédure pour installer le code Python pour le 
+Guzik-O-Scope. 
+L'installation est facultative. 
+Pour utiliser le code sans l'installer, il faut tout de même le télécharger et 
+s'assurer que le code soit dans un répertoire accessible par l'instance de 
+Python.
+
+\section*{Obtenir les dépendances}
+Pour pouvoir fonctionner, le Guzik-O-Scope à plusieurs dépendances, dont numpy 
+et matplotlib, qui peuvent être facilement installée, si elles ne le sont pas 
+déjà, et la librairie \verb+SignalProcessing+. 
+Celle dernière est une librairie maison qui se trouve sur Github à l'adresse 
+\href{https://github.com/a-dumont/SignalProcessing}
+{https://github.com/a-dumont/SignalProcessing}. 
+Pour installer cette libraire, il est nécessaire de compiler du code, soit à 
+partir de cygwin sur Windows, où directement avec \verb+gcc+ sur Linux.
+
+\subsection*{Windows}
+Pour que le code puisse compiler correctement, certaines dépendances doivent 
+êtres installées à partir de cygwin, notamment, \verb+CMake+, \verb+MinGW+, 
+\verb+FFTW3+ et \verb+Pybind11+. 
+Une fois ces dépendances installées via l'installateur de cygwin, il faut 
+ouvrir
+exécuter les commandes suivantes.
+\begin{lstlisting}[language=Bash]
+git clone https://github.com/a-dumont/SignalProcessing
+cd SignalProcessing/
+mkdir build && cd build
+CXX=/usr/bin/x86_64-w64-mingw32-g++.exe cmake .. 
+cmake --build . && cmake --install .
+cd .. && /c/Anaconda3/python.exe setup.py install
+\end{lstlisting}
+Il est très important qu'a la dernière ligne, la commande \verb+python.exe+ 
+soit celle du système et que son emplacement peut être différent de l'exemple 
+fourni ici.
+Puisqu'il faut installer les dépendances, les privilèges d'administrateur 
+peuvent êtres requis. 
+Si c'est le cas, le terminal cygwin doit être ouvert en tant qu'administrateur.
+
+\subsection*{Linux}
+Pour que le code puisse compiler correctement, certaines dépendances doivent 
+êtres installées donc, \verb+CMake+, \verb+FFTW3+ et \verb+Pybind11+. 
+Une fois ces dépendances installées, il faut 
+exécuter les commandes suivantes.
+\begin{lstlisting}[language=Bash]
+git clone https://github.com/a-dumont/SignalProcessing
+cd SignalProcessing/
+mkdir build && cd build
+cmake .. && cmake --build . && cmake --install .
+cd .. && python setup.py install
+\end{lstlisting}
+Puisqu'il faut installer les dépendances, les privilèges d'administrateur 
+peuvent êtres requis. 
+
+\section*{Obtenir le code}
+La façon la plus simple d'obtenir le code est d'utiliser \verb+git+ à partir 
+d'un terminal, que ce soit sur Windows, macOS où Linux. 
+Plus spécifiquement, il faut naviguer au répertoire choisi via le terminal et 
+exécuter la commande suivante,
+
+\begin{lstlisting}[language=Bash]
+git clone https://github.com/a-dumont/GuzikGUI
+\end{lstlisting}
+
+Une façon alternative d'obtenir le code source est d'accéder au dépôt sur 
+Github via un navigateur web et de télécharger le code dans une archive de 
+type ZIP. 
+Une fois cette archive décompresser dans le répertoire voulu, l'installation 
+peut procéder normalement.
+
+\section*{Installation}
+Pour installer le code du Guzik-O-Scope comme un module Python, il faut 
+naviguer dans le répertoire \verb+GuzikGUI+ à partir d'un terminal et lancer 
+la commande,
+\begin{lstlisting}[language=Bash]
+python setup.py install
+\end{lstlisting}
+Il est possible que l'installation requiert les privilèges d'administrateur. 
+
 \chapter*{Utilisation}
 \addcontentsline{toc}{chapter}{Utilisation}
-
-\section*{Chargement du code pyHegel}
-\addcontentsline{toc}{section}{Chargement du code pyHegel}
-Pour pouvoir utiliser MegaYoko, il faut charger le code qui définit 
-l'instrument pyHegel. 
-Pour se faire, simplement ouvrir une console pyHegel et exécuter la commande
-\begin{lstlisting}[]
-%run -i MegaYoko.py
+Le Guzik-O-Scope est fait pour fonctionner avec pyHegel et son implémentation 
+du Guzik. 
+Par contre, le code contient une classe permettant d'imiter le comportement du 
+Guzik qui est instanciée automatiquement si le code ne parvient pas à 
+charger l'implémentation de pyHegel. 
+Ce cas est particulièrement pratique pour tester des modifications au code du 
+Guzik-O-Scope sans avoir besoin du matériel physique.
+\section*{Application seule}
+Pour lancer le Guzik-O-Scope il suffit d'exécuter la commande suivante à partir 
+d'un terminal.
+\begin{lstlisting}[language=Bash]
+python -m GuzikGUI
 \end{lstlisting}
-Pour utiliser MegaYoko dans un script, il faut plutôt utiliser la commande 
-\verb+import+ de python,
+Il est possible d'écrire un script qui contient cette commande et de créer un 
+raccourci pour celui-ci pour lancer l'application en un clic.
+
+\section*{Application avec debug}
+Pour une raison ou une autre, il peut être utile d'avoir accès aux variables 
+qu'utilise le Guzik-O-Scope. 
+Il est possible de lancer l'application via \verb+Ipython+ de manière 
+interactive avec les commandes suivantes.
 \begin{lstlisting}[language=Python]
-from MegaYoko.py import MegaYoko
+from GuzikGUI import launch
+application, window = launch()
 \end{lstlisting}
-
-\lstset{emph={MegaYoko,get,set,level,range,output_\en}}
-
-\section*{Initialisation}
-\addcontentsline{toc}{section}{Initialisation}
-Une fois le code exécuté, la classe \verb+MegaYoko+ devient accessible. 
-Pour l'initialiser, il faut charger deux sources individuelles et appeler le 
-constructeur de la classe \verb+MegaYoko+.
-\begin{lstlisting}[language=Python]
-;load yo1
-;load yo2
-
-megaYoko = MegaYoko(yo1,yo2)
-\end{lstlisting}
-
-\section*{Paramètres}
-Les différents paramètres accessibles de MegaYoko sont tous analogues aux 
-paramètres des sources individuelles. 
-Ceci permet donc d'utiliser MegaYoko à la place d'une source seule avec des 
-modifications minimales aux scripts d'acquisition des données déjà existants. 
-Les sous-sections suivantes seront dédiées à chacun des paramètres actuellement 
-implémentés.
-\addcontentsline{toc}{section}{Paramètres}
-
-\subsection*{level}
-\addcontentsline{toc}{subsection}{level}
-Tout comme le paramètre \verb+level+ d'une source Yokogawa seule, celui-ci 
-dicte la tension appliquée en sortie. 
-Ce paramètre peut être lu en utilisant la commande \verb+get+,
-\begin{lstlisting}[language=Python]
-get(megaYoko.level)
-\end{lstlisting}
-et peut être modifié en utilisant plutôt la commande \verb+set+
-\begin{lstlisting}[language=Python]
-set(megaYoko.level, valeur)
-\end{lstlisting}
-où \verb+valeur+ doit être un nombre. 
-
-\vspace{0.5cm}
-Lorsque ce paramètre est modifié, la classe fait des calculs à l'interne pour 
-déterminer quelle partie de la tension doit être appliquée par chacune des 
-sources. 
-Pour assurer le bon fonctionnement de MegaYoko ainsi que l'exactitude de ces 
-calculs, il est impératif de respecter les branchements indiqués dans le 
-chapitre précédent.
-
-\subsection*{range}
-\addcontentsline{toc}{subsection}{range}
-Tout comme le paramètre \verb+range+ d'une source Yokogawa seule, celui-ci sert 
-à définir l'échelle de tension de la source. 
-Contrairement à une source seule, ce paramètre est maintenant une liste qui 
-doit contenir deux valeurs.
-Ce paramètre peut être lu en utilisant la commande \verb+get+,
-\begin{lstlisting}[language=Python]
-get(megaYoko.range)
-\end{lstlisting}
-et peut être modifié en utilisant plutôt la commande \verb+set+
-\begin{lstlisting}[language=Python]
-set(megaYoko.range, [valeur1, valeur2])
-\end{lstlisting}
-où \verb+valeur1+ et \verb+valeur2+ doivent être des nombres. 
-
-\subsection*{output\_en}
-\addcontentsline{toc}{subsection}{output\_en}
-Le paramètre \verb+output_en+ détermine si la sortie est active ou non.
-Ce paramètre peut être lu en utilisant la commande \verb+get+,
-\begin{lstlisting}[language=Python]
-get(megaYoko.output_en)
-\end{lstlisting}
-et peut être modifié en utilisant plutôt la commande \verb+set+
-\begin{lstlisting}[language=Python]
-set(megaYoko.output_en, valeur)
-\end{lstlisting}
-où \verb+valeur+ doit être une variable booléenne, soit \verb+True+ ou 
-\verb+False+ ou encore 1 ou 0.
+L'objet \verb+window+ contient toute les variables intéressantes.
 \clearpage\null\thispagestyle{empty}
+
+\chapter*{Fonctionnalités}
+\addcontentsline{toc}{chapter}{Fonctionnalités}
+
 
 \end{document}

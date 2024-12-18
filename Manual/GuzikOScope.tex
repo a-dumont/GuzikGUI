@@ -219,6 +219,105 @@ L'objet \verb+window+ contient toute les variables intéressantes.
 
 \chapter*{Fonctionnalités}
 \addcontentsline{toc}{chapter}{Fonctionnalités}
+L'interface du Guzik-O-Scope est séparée en plusieurs onglets, ce chapitre 
+passera, rapidement, en revue le rôle de chacun de ces onglets.
 
+\section*{Guzik}
+\begin{center}
+		\includegraphics[width=\textwidth]{Figures/Guzik.png}
+\end{center}
+
+Ce premier onglet sert à configurer les différents paramètres du Guzik. 
+Il est possible d'y changer les canaux utiliser pour la détection, le gain et 
+le décalage en tension sur chacun des canaux. 
+Les paramètre restants sont le nombre de points pour chaque mesure, la 
+résolution de chaque point de mesure, l'égaliseur, la fréquence de mesure et 
+la présence d'un signal de référence externe. 
+Pour envoyer les modifications effectuées à l'instrument, il faut cliquer sur 
+le bouton \textit{Update config}. 
+Pour lire la configuration actuelle de l'instrument, il faut cliquer sur le 
+bouton \textit{read config}.
+
+\section*{Acquisition}\vspace{1cm}
+
+L'onglet \textit{Acquisition} permet de choisir si les mesures seront moyennées 
+ou non, et si oui combien de fois. 
+Pour activer le moyennage, sous \textit{Averaging} choisir l'option 
+\textit{True} et entrer un nombre dans le champ de texte.
+Il est aussi possible de choisir entre des mesures individuelle ou en continu 
+en utilisant les boutons \textit{Single} et \textit{Continuous} respectivement. 
+Pour une mesure individuelle, le Guzik-O-Scope moyenne le nombre de mesures 
+spécifié et affiche le résultat en temps réel. 
+Pour des mesures en continu, la moyenne est cyclique, c'est-à-dire que qu'à 
+chaque fois que le nombre de mesures spécifié est atteint, la moyenne se 
+réinitialise.\vspace{1cm}
+
+\begin{center}
+		\includegraphics[width=\textwidth]{Figures/Acquisition.png}
+\end{center}\vspace{1cm}
+
+Comme le Guzik-O-Scope n'implémente pas de parallélisation, lorsque des mesures 
+sont en cours l'interface graphique répond plus lentement. 
+Pour retrouver le contrôle complet de l'interface il est possible d'interrompre 
+une mesure en continue ou le moyennage d'une mesure individuelle en utilisant 
+le bouton \textit{stop}.
+Finalement, cet onglet permet aussi de stocker jusqu'à quatre courbes en 
+mémoire pour permettre la comparaison entre différentes mesures en utilisant 
+les différents boutons \textit{save} et \textit{clear}.\clearpage
+
+\section*{Mode}\vspace{1cm}
+
+L'onglet \textit{Mode} permet de choisr le type de mesure qui sera effectué par 
+le Guzik-O-Scope. 
+Il est possible de changer entre des mesures temporelles et des mesures en 
+fréquence en changeant la valeur du champ \textit{Domain}. 
+Pour l'espace du temps ou l'espace des fréquences les différentes mesures 
+disponibles sont listées dans le champ \textit{Mode} juste en dessous de 
+\textit{Domain}. 
+En temps, les mesures disponibles sont, \textit{1D~Histogram} qui trace les 
+histogrammes en une dimension sur chaque canal de mesure actif, 
+\textit{2D Histogram} qui trace l'histogramme en deux dimensions des deux 
+canaux actifs et finalement \textit{Time series} qui trace le signal brut de 
+chaque canal.\vspace{1cm}
+
+\begin{center}
+		\includegraphics[width=\textwidth]{Figures/Mode.png}
+\end{center}\vspace{1cm}
+
+En fréquence, les mesures disponibles sont \textit{Power Spectrum} qui trace 
+la densité spectrale de bruit sur chaque canal actif et \textit{Cross Power 
+Spectrum} qui trace le module de la corrélation croisée entre les deux canaux 
+actifs. 
+Ces deux fonctions utilise le paramètre \textit{Block Size} qui permet de 
+choisir la taille des blocs utilisés pour les transformés de Fourier. 
+Pour changer le type de mesure ou un des paramètres comme \textit{Block Size}, 
+il est nécessaire de cliquer le bouton \textit{Set Mode}.\clearpage
+
+\section*{Plot}\vspace{1cm}
+
+Présentement, l'onglet \textit{Plot} est peu utile mais le but est qu'il serve 
+à changer le type de graphique pour une mesure donnée.
+%\begin{center}
+%		\includegraphics[width=\textwidth]{Figures/Plot.png}
+%\end{center}
+
+\section*{Export}\vspace{1cm}
+
+Le dernier onglet, \textit{Export}, permet d'exporter les données vers un 
+fichier. 
+Il est possible de sauvegarder les données de la dernière mesure ainsi que des 
+quatre courbes en mémoire en cochant les cases associées. 
+L'option \textit{Compression} permet de déterminer si les fichiers seront 
+compressés par la fonction \verb+numpy.save+ ou non. 
+Finalement le bouton \textit{Export} permet d'ouvrir l'explorateur de fichier 
+pour effectuer la sauvegarde. 
+Il est important de noter que le graphique affiché peut être exporter à partir 
+de n'importe quel onglet en utilisant le bouton de sauvegarde qui se trouve au 
+haut de l'interface.\vspace{1cm}
+
+\begin{center}
+		\includegraphics[width=\textwidth]{Figures/Export.png}
+\end{center}
+\clearpage\null\thispagestyle{empty}
 
 \end{document}
